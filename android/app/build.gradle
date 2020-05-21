@@ -21,6 +21,9 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+
+
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -37,21 +40,41 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "link.solotravel.android.test.solotravel"
-        minSdkVersion 16
+        applicationId "link.solotravel.android"
+        minSdkVersion 17
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
-    buildTypes {
+    signingConfigs {
+        debug {
+            storeFile file('../shopf1.jks')
+            storePassword 'ShopF1@#123'
+            keyAlias 'ShopF1'
+            keyPassword 'ShopF1@#123'
+        }
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            storeFile file('../shopf1.jks')
+            storePassword 'ShopF1@#123'
+            keyAlias 'ShopF1'
+            keyPassword 'ShopF1@#123'
         }
     }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            // Caution! In production, you need to generate your own keystore file.
+            // see https://facebook.github.io/react-native/docs/signed-apk-android.
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+
 }
 
 flutter {
@@ -60,4 +83,18 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "com.google.firebase:firebase-messaging:20.1.7"
+    implementation 'com.google.firebase:firebase-analytics:17.4.1'
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
+        transitive = true;
+    }
+    def multidex_version = "2.0.1"
+    implementation 'androidx.multidex:multidex:$multidex_version'
 }
+
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'

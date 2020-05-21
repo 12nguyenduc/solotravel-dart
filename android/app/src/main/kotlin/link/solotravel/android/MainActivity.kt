@@ -1,4 +1,4 @@
-package link.solotravel.android.test.solotravel
+package link.solotravel.android
 
 import io.flutter.embedding.android.FlutterActivity
 

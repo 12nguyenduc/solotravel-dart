@@ -5,11 +5,14 @@ import 'dart:ui' as ui show TextHeightBehavior;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_native_web/flutter_native_web.dart';
 import 'package:flutter_twitter_login/flutter_twitter_login.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart';
-import 'package:interactive_webview/interactive_webview.dart';
+import 'package:solotravel/network/api.dart';
+import 'package:solotravel/utils/log.dart';
 
 
 void main() {
@@ -81,15 +84,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
   String title;
 
   @override
@@ -97,8 +91,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-
+  Api api = new Api();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -114,7 +107,6 @@ class _MyHomePageState extends State<MyHomePage> {
     consumerKey: 'bc5ESW8eHcKTp0id7UrPLjF6S',
     consumerSecret: 'XUkGmI0eUuHYMGECdBjclflPEDA75MZ1QBYGx9q9ZmN3lQpdvk',
   );
-  final _webView = InteractiveWebView();
 
   String random = 'ksdfs';
 
@@ -127,27 +119,8 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
     _googleSignIn.signInSilently();
-    _webViewHandler();
 
   }
-
-  Future<Null> injectJS(){
-    return _webView.evalJavascript("const nativeCommunicator = typeof webkit !== 'undefined' ? webkit.messageHandlers.native : window.native; while(true){ nativeCommunicator.postMessage(''+Math.random()); }");
-  }
-
-  _webViewHandler() async {
-    _webView.didReceiveMessage.listen((message) {
-      print(message.data);
-    });
-
-    _webView.stateChanged.listen((state) {
-      print("stateChanged ${state.type} ${state.url}");
-    });
-
-    _webView.loadHTML("<html></html>", baseUrl: "");
-    injectJS();
-  }
-
 
 
   Future<void> _handleSignIn() async {
@@ -194,44 +167,32 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
+  printText(text){
+    print(text);
+  }
 
+  _callApi(){
+    api.callAPI(Method.GET, link: 'https://randomuser.me/api/', params: {'phone': '0898572528', 'password': '123456'}).listen((response) {
+      myLog(response);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: MyText(widget.title, style: TextStyle(fontSize: 14, fontStyle: FontStyle.normal, color: Colors.yellow),),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text('Web writing best practices: Keep it lean'),
             MyText('Web writing best practices: Keep it lean'),
+            RaisedButton(
+              child: const Text('Call API'),
+              onPressed: _callApi,
+            ),
             RaisedButton(
               child: const Text('Sign in Google'),
               onPressed: _handleSignIn,

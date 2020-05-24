@@ -2,9 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:rxdart/rxdart.dart';
-import 'package:solotravel/utils/log.dart';
+import 'package:solotravel/webthread/webthread.dart';
 import 'package:uuid/uuid.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 enum Method {
   GET,
@@ -23,30 +22,10 @@ class Api {
     return _singleton;
   }
 
-  static final subject = BehaviorSubject<Map<String, dynamic>>();
 
-  final flutterWebviewPlugin = new FlutterWebviewPlugin();
   static Map<String, dynamic> queue = {};
 
-  Api._internal(){
-    flutterWebviewPlugin.launch('',
-        hidden: true,
-        javascriptChannels: jsChannels
-    );
-    flutterWebviewPlugin.onStateChanged.listen((viewState) async {
-      if (viewState.type == WebViewState.finishLoad) {
-      }
-    });
-  }
-
-  final Set<JavascriptChannel> jsChannels = [
-    JavascriptChannel(
-        name: 'API',
-        onMessageReceived: (JavascriptMessage message) {
-          var response = json.decode(message.message);
-          subject.add(response);
-        }),
-  ].toSet();
+  Api._internal();
 
   String mapMethodAxios(Method method){
     switch(method){
@@ -100,11 +79,11 @@ class Api {
     (method == Method.GET ? getQueryString(params) : '')}', ${
     method == Method.GET ? 'null' : json.encode(params)
     }, ${json.encode(headers)})
-        .then(response=>API.postMessage(JSON.stringify({id: '$id',response})))
-        .catch((error)=>API.postMessage(JSON.stringify({id: '$id',response: error})));
+        .then(response=>${WebThread.jsChannel}.postMessage(JSON.stringify({id: '$id',response})))
+        .catch((error)=>${WebThread.jsChannel}.postMessage(JSON.stringify({id: '$id',response: error})));
     })();
     ''';
-    flutterWebviewPlugin.evalJavascript(code);
-    return Api.subject.where((event) => event['id']==id).share();
+    WebThread.flutterWebviewPlugin.evalJavascript(code);
+    return WebThread.subject.where((event) => event['id']==id).share();
   }
 }

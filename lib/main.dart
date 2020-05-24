@@ -13,7 +13,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart';
 import 'package:solotravel/network/api.dart';
 import 'package:solotravel/utils/log.dart';
-
+import 'package:solotravel/webthread/webthread.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
+import 'components/audio/AudioPlayer.dart';
 
 void main() {
   runApp(MyApp());
@@ -77,7 +79,9 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo',),
+      home: MyHomePage(
+        title: 'Flutter Demo',
+      ),
     );
   }
 }
@@ -94,7 +98,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Api api = new Api();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
 
   GoogleSignInAccount _currentUser;
   GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -119,25 +122,63 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
     _googleSignIn.signInSilently();
+    new WebThread();
 
+    Future.delayed(new Duration(seconds: 2), playAudioFirst);
   }
 
+  int selectedPage = 0;
+
+  Future<dynamic> playAudioFirst() {
+    _playAudio(pages[0]['audio'], image: pages[0]['image']);
+    controller.addListener(() {
+      setState(() {
+        currentPageValue = controller.page;
+      });
+      if (controller.page - controller.page.floor() == 0) {
+        int page = int.parse('${controller.page.floor()}');
+        selectedPage = page;
+        _playAudio(pages[page]['audio'], image: pages[page]['image']);
+      }
+    });
+  }
 
   Future<void> _handleSignIn() async {
-    try {
-      await _googleSignIn.signIn();
-    } catch (error) {
-      print(error);
-    }
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+//    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+//
+//    final AuthCredential credential = GoogleAuthProvider.getCredential(
+//      accessToken: googleAuth.accessToken,
+//      idToken: googleAuth.idToken,
+//    );
+
+//    final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+    print("signed in " + googleUser.email);
   }
 
   Future<void> _handleSignInTwitter() async {
     final TwitterLoginResult result = await twitterLogin.authorize();
-
     switch (result.status) {
       case TwitterLoginStatus.loggedIn:
         var session = result.session;
-        print(session.token+' / '+session.secret);
+        final AuthCredential credential = TwitterAuthProvider.getCredential(
+            authToken: session.token, authTokenSecret: session.secret);
+        final FirebaseUser user =
+            (await _auth.signInWithCredential(credential)).user;
+        assert(user.email != null);
+        assert(user.displayName != null);
+        assert(!user.isAnonymous);
+        assert(await user.getIdToken() != null);
+
+        final FirebaseUser currentUser = await _auth.currentUser();
+        assert(user.uid == currentUser.uid);
+        setState(() {
+          if (user != null) {
+            myLog('Successfully signed in with Twitter. ' + user.uid);
+          } else {
+            myLog('Failed to sign in with Twitter. ');
+          }
+        });
         break;
       case TwitterLoginStatus.cancelledByUser:
         print('user cancel');
@@ -154,7 +195,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
-        print(result.accessToken.token);
+        myLog(result.accessToken.token);
+//        final AuthCredential credential = FacebookAuthProvider.getCredential(
+//          accessToken: result.accessToken.token,
+//        );
+//        myLog(credential);
+//        await _auth.signInWithCredential(credential);
+//        final FirebaseUser user =
+//            (await _auth.signInWithCredential(credential)).user;
+//        assert(user.email != null);
+//        assert(user.displayName != null);
+//        assert(!user.isAnonymous);
+//        assert(await user.getIdToken() != null);
+//
+//        final FirebaseUser currentUser = await _auth.currentUser();
+//        assert(user.uid == currentUser.uid);
+//        setState(() {
+//          if (user != null) {
+//            myLog('Successfully signed in with Facebook. ' + user.uid);
+//          } else {
+//            myLog('Failed to sign in with Facebook. ');
+//          }
+//        });
         break;
       case FacebookLoginStatus.cancelledByUser:
         print('user cancel');
@@ -167,48 +229,125 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
-  printText(text){
-    print(text);
-  }
-
-  _callApi(){
-    api.callAPI(Method.GET, link: 'https://randomuser.me/api/', params: {'phone': '0898572528', 'password': '123456'}).listen((response) {
+  _callApi() {
+    api.callAPI(Method.GET, link: 'https://randomuser.me/api/', params: {
+      'phone': '0898572528',
+      'password': '123456'
+    }).listen((response) {
       myLog(response);
     });
   }
 
+  bool isPlay = false;
+  AudioPlayer audioPlayer = new AudioPlayer();
+
+  final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer();
+
+  _playAudio(String url, {String image}) {
+//    audioPlayer.play(url);
+    _assetsAudioPlayer.open(
+      Audio(
+        url,
+        metas: Metas(
+          title: "Country",
+          artist: "Florent Champigny",
+          album: "CountryAlbum",
+          image: MetasImage.network(image), //can be MetasImage.network
+        ),
+      ),
+      autoStart: true,
+      showNotification: true,
+    );
+    _assetsAudioPlayer.loop = true;
+  }
+
+  @override
+  void dispose() {
+    _assetsAudioPlayer.dispose();
+    super.dispose();
+  }
+
+  _pauseAudio() {
+    audioPlayer.pause();
+  }
+
+  _resumeAudio() {
+    audioPlayer.resume();
+  }
+
+  PageController controller = PageController();
+
+  var pages = [
+    {
+      'audio': 'assets/audio/1050_daydream.mp3',
+      'image': 'http://localhost:8997/i0.jpg'
+    },
+    {
+      'audio': 'assets/audio/1931_deep_cove.mp3',
+      'image': 'http://localhost:8997/i1.jpg'
+    },
+    {
+      'audio': 'assets/audio/18331_Bird_night.mp3',
+      'image': 'http://localhost:8997/i2.jpg'
+    },
+    {
+      'audio': 'assets/audio/21104_Street_carnival.mp3',
+      'image': 'http://localhost:8997/i3.jpg'
+    },
+    {
+      'audio': 'assets/audio/22082_Beach_wave.mp3',
+      'image': 'http://localhost:8997/i4.jpg'
+    },
+    {
+      'audio': 'assets/audio/24298_Rain_Bali_Indonesia.mp3',
+      'image': 'http://localhost:8997/i5.jpg'
+    },
+    {'audio': 'assets/audio/cow.mp3', 'image': 'http://localhost:8997/i6.jpg'},
+  ];
+
+  _buildPage(BuildContext context, int position) {
+    Color color = Colors.black;
+
+    if (position == currentPageValue.floor()) {
+      return Container(
+        padding: EdgeInsets.all((70 * (currentPageValue - position))),
+        decoration: BoxDecoration(color: color),
+        child: ClipRRect(
+            borderRadius: BorderRadius.all(
+                Radius.circular((currentPageValue - position) * 40)),
+            child: Image.network(pages[position]['image'], fit: BoxFit.cover)),
+      );
+    } else if (position == currentPageValue.floor() + 1) {
+      return Container(
+          padding: EdgeInsets.all((70 * (position - currentPageValue))),
+          decoration: BoxDecoration(color: color),
+          child: ClipRRect(
+              borderRadius: BorderRadius.all(
+                  Radius.circular((position - currentPageValue) * 40)),
+              child:
+                  Image.network(pages[position]['image'], fit: BoxFit.cover)));
+    } else {
+      return Container(
+        color: color,
+        child: Center(
+            child: Image.network(pages[position]['image'], fit: BoxFit.cover)),
+      );
+    }
+  }
+
+  double currentPageValue = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: MyText(widget.title, style: TextStyle(fontSize: 14, fontStyle: FontStyle.normal, color: Colors.yellow),),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('Web writing best practices: Keep it lean'),
-            MyText('Web writing best practices: Keep it lean'),
-            RaisedButton(
-              child: const Text('Call API'),
-              onPressed: _callApi,
-            ),
-            RaisedButton(
-              child: const Text('Sign in Google'),
-              onPressed: _handleSignIn,
-            ),
-            RaisedButton(
-              child: const Text('Sign in Facebook'),
-              onPressed: _handleSignInFacebook,
-            ),
-            RaisedButton(
-              child: const Text('Sign in Twitter'),
-              onPressed: _handleSignInTwitter,
-            ),
-
-          ],
-        ),
-      ),
-    );
+        body: Container(
+            color: Colors.black,
+            child: PageView.builder(
+              controller: controller,
+              itemBuilder: (context, position) {
+                return _buildPage(context, position);
+              },
+              itemCount: pages.length, // Can be null
+            )));
   }
 }

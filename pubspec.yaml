@@ -74,6 +74,7 @@ dependencies:
   flutter_webview_plugin: ^0.3.11
   local_assets_server: ^1.0.2+5
   assets_audio_player: ^1.6.0+2
+  community_material_icon: ^3.5.95
 dev_dependencies:
   flutter_test:
     sdk: flutter

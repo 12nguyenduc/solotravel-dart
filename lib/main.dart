@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_native_web/flutter_native_web.dart';
 import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart';
@@ -16,6 +18,7 @@ import 'package:solotravel/utils/log.dart';
 import 'package:solotravel/webthread/webthread.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'components/audio/AudioPlayer.dart';
+import 'package:community_material_icon/community_material_icon.dart';
 
 void main() {
   runApp(MyApp());
@@ -336,11 +339,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   double currentPageValue = 0;
+  int selectedIndex = 0;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
+  Widget tabs(BuildContext context) {
+    switch (selectedIndex) {
+      case 0:
+        return Container(
             color: Colors.black,
             child: PageView.builder(
               controller: controller,
@@ -348,6 +352,145 @@ class _MyHomePageState extends State<MyHomePage> {
                 return _buildPage(context, position);
               },
               itemCount: pages.length, // Can be null
-            )));
+            ));
+      case 1:
+        return Container(
+          color: Colors.white,
+          child: SafeArea(
+              child: ListView(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+                child: Text(
+                  "Explore",
+                  style: TextStyle(
+                      fontSize: 32,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Roboto"),
+                ),
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16, top: 4),
+                  child: Text(
+                    '''Try to remind yourself what "living in the moment" means.''',
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xff999999),
+                        fontFamily: "Roboto"),
+                  )),
+              PageAutoScroll(),
+            ],
+          )),
+        );
+      case 2:
+        return Container();
+      default:
+        return Container();
+    }
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        extendBody: true,
+        extendBodyBehindAppBar: true,
+        bottomNavigationBar: BottomNavigationBar(
+            currentIndex: selectedIndex,
+            unselectedItemColor:
+                selectedIndex == 0 ? Color(0xff60595c) : Color(0xffe7e7e7),
+            selectedItemColor:
+                selectedIndex == 0 ? Color(0xffb3b0b1) : Color(0xff404040),
+            onTap: _onItemTapped,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            backgroundColor:
+                selectedIndex == 0 ? Color(0x00000000) : Colors.white,
+            // transparent
+            type: BottomNavigationBarType.fixed,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: Icon(CommunityMaterialIcons.home_outline),
+                  title: Text("")),
+              BottomNavigationBarItem(icon: Icon(Icons.grade), title: Text("")),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.notifications), title: Text("")),
+            ]),
+        body: tabs(context));
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class PageAutoScroll extends StatefulWidget {
+  PageAutoScroll();
+
+  @override
+  _PageAutoScrollState createState() => _PageAutoScrollState();
+}
+
+class _PageAutoScrollState extends State<PageAutoScroll> {
+  int _currentPage = 0;
+  PageController _pageController = PageController(
+    initialPage: 0,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    Timer.periodic(Duration(seconds: 5), (Timer timer) {
+      if (_currentPage < 2) {
+        _currentPage++;
+      } else {
+        _currentPage = 0;
+      }
+
+      _pageController.animateToPage(
+        _currentPage,
+        duration: Duration(milliseconds: 350),
+        curve: Curves.easeIn,
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height:  (MediaQuery.of(context).size.width-32)*9/14,
+        margin: const EdgeInsets.only(top: 16, bottom: 16),
+        child: PageView(
+          controller: _pageController,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 16, right: 16),
+//          height: MediaQuery.of(context).size.width*9/16,
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                child: Image.network("http://localhost:8997/i0.jpg", fit: BoxFit.cover,),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 16, right: 16),
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                child: Image.network("http://localhost:8997/i1.jpg", fit: BoxFit.cover,),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 16, right: 16),
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                child: Image.network("http://localhost:8997/i2.jpg", fit: BoxFit.cover,),
+              ),
+            ),
+          ],
+        ));
   }
 }

@@ -19,6 +19,7 @@ import 'package:solotravel/webthread/webthread.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'components/audio/AudioPlayer.dart';
 import 'package:community_material_icon/community_material_icon.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() {
   runApp(MyApp());
@@ -358,30 +359,58 @@ class _MyHomePageState extends State<MyHomePage> {
           color: Colors.white,
           child: SafeArea(
               child: ListView(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-                child: Text(
-                  "Explore",
-                  style: TextStyle(
-                      fontSize: 32,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "Roboto"),
-                ),
-              ),
-              Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16, top: 4),
-                  child: Text(
-                    '''Try to remind yourself what "living in the moment" means.''',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xff999999),
-                        fontFamily: "Roboto"),
-                  )),
-              PageAutoScroll(),
-            ],
-          )),
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 36, left: 16, right: 16),
+                    child: Text(
+                      "Explore",
+                      style: TextStyle(
+                          fontSize: 32,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Roboto"),
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        '''Try to remind yourself what "living in the moment" means.''',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xff999999),
+                            fontFamily: "Roboto"),
+                      )),
+                  PageAutoScroll(),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: FlatButton(
+                              onPressed: () {  },
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    width: 48,
+                                    height: 48,
+                                    decoration: BoxDecoration(color: Colors.green,borderRadius: BorderRadius.all(Radius.circular(48/2))),
+                                      child: Center(child: SvgPicture.asset(
+                                          'assets/images/bass.svg',
+                                          color: Colors.red,
+                                          semanticsLabel: 'Sound',
+                                        width: 24,
+                                          height: 24,
+                                      ))
+                                  )
+                                ],
+                              ),
+                            )
+                          )
+                        ],
+                      )
+                  ),
+                ],
+              )),
         );
       case 2:
         return Container();
@@ -418,15 +447,18 @@ class _MyHomePageState extends State<MyHomePage> {
               BottomNavigationBarItem(
                   icon: Icon(CommunityMaterialIcons.home_outline),
                   title: Text("")),
-              BottomNavigationBarItem(icon: Icon(Icons.grade), title: Text("")),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.notifications), title: Text("")),
+                  icon: Icon(CommunityMaterialIcons.plus_circle_outline),
+                  title: Text("")),
+              BottomNavigationBarItem(
+                  icon: Icon(CommunityMaterialIcons.circle_outline),
+                  title: Text("")),
             ]),
         body: tabs(context));
   }
 
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+//  @override
+//  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class PageAutoScroll extends StatefulWidget {
@@ -438,6 +470,7 @@ class PageAutoScroll extends StatefulWidget {
 
 class _PageAutoScrollState extends State<PageAutoScroll> {
   int _currentPage = 0;
+  Timer timer;
   PageController _pageController = PageController(
     initialPage: 0,
   );
@@ -445,7 +478,7 @@ class _PageAutoScrollState extends State<PageAutoScroll> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(Duration(seconds: 5), (Timer timer) {
+    timer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
       if (_currentPage < 2) {
         _currentPage++;
       } else {
@@ -463,7 +496,7 @@ class _PageAutoScrollState extends State<PageAutoScroll> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height:  (MediaQuery.of(context).size.width-32)*9/14,
+        height: (MediaQuery.of(context).size.width - 32) * 9 / 14,
         margin: const EdgeInsets.only(top: 16, bottom: 16),
         child: PageView(
           controller: _pageController,
@@ -473,24 +506,40 @@ class _PageAutoScrollState extends State<PageAutoScroll> {
 //          height: MediaQuery.of(context).size.width*9/16,
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(12)),
-                child: Image.network("http://localhost:8997/i0.jpg", fit: BoxFit.cover,),
+                child: Image.network(
+                  "http://localhost:8997/i0.jpg",
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Container(
               margin: const EdgeInsets.only(left: 16, right: 16),
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(12)),
-                child: Image.network("http://localhost:8997/i1.jpg", fit: BoxFit.cover,),
+                child: Image.network(
+                  "http://localhost:8997/i1.jpg",
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Container(
               margin: const EdgeInsets.only(left: 16, right: 16),
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(12)),
-                child: Image.network("http://localhost:8997/i2.jpg", fit: BoxFit.cover,),
+                child: Image.network(
+                  "http://localhost:8997/i2.jpg",
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ],
         ));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
+    _pageController.dispose();
   }
 }

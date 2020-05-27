@@ -33,7 +33,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-                <string>twitterkit-bc5ESW8eHcKTp0id7UrPLjF6S</string>
+				<string>twitterkit-bc5ESW8eHcKTp0id7UrPLjF6S</string>
 				<string>com.googleusercontent.apps.747691333334-2ou6i8imtsrnlcomh1ubnhs3d5oth28r</string>
 			</array>
 		</dict>
@@ -53,7 +53,7 @@
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
 		<string>twitter</string>
-        <string>twitterauth</string>
+		<string>twitterauth</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -67,6 +67,7 @@
 	<array>
 		<string>fetch</string>
 		<string>processing</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

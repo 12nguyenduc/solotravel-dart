@@ -43,6 +43,7 @@ class _MainScreenState extends State<MainScreen> {
         bottomNavigationBar:
 
         BottomNavigationBar(
+            elevation: selectedIndex==0?0:1,
             currentIndex: selectedIndex,
             unselectedItemColor:
             selectedIndex == 0 ? Color(0xff60595c) : Color(0xffe7e7e7),

@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:page_transition/page_transition.dart';
+
+import 'Focus.dart';
 
 class HomeScreen extends StatefulWidget {
   static HomeScreen _instance = new HomeScreen._();
@@ -171,6 +174,21 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  _goFocus(){
+    Navigator.push(context, PageRouteBuilder(
+      opaque: false,
+      transitionsBuilder: (___, Animation<double> animation, ____, Widget child) {
+        return ScaleTransition(
+          scale: animation,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+            child: child,
+          ),
+        );
+      }, pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) { return FocusScreen(); }
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -235,8 +253,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(child: Container()),
               Row(
                 children: <Widget>[
-                  Expanded(
-                    child: Column(
+                 Expanded(
+                    child: InkWell(
+                      onTap: _goFocus,
+                      child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
@@ -261,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ))
                       ],
                     ),
-                  ),
+                  ),),
                   Expanded(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,

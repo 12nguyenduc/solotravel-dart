@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:solotravel/screens/Main.dart';
 import 'webthread/webthread.dart';
 
 
 void main() {
   runApp(MyApp());
+  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
 }
 
 class MyApp extends StatelessWidget {

@@ -4,6 +4,7 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:solotravel/screens/SoundScene.dart';
 
 class ExploreScreen extends StatefulWidget {
   static ExploreScreen _instance = new ExploreScreen._();
@@ -20,6 +21,26 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  _goSoundScene(){
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            transitionsBuilder:
+                (___, Animation<double> animation, ____, Widget child) {
+              return  FadeTransition(
+                opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+                child: ScaleTransition(
+                  scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+                  child: child,
+                ),
+              );
+            },
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) {
+              return SoundSceneScreen();
+            }));
   }
 
   @override
@@ -114,7 +135,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   )),
                   Expanded(
                       child: InkWell(
-                    onTap: () {},
+                    onTap: _goSoundScene,
                     child: Column(
                       children: <Widget>[
                         Container(

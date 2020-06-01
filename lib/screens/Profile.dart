@@ -1,6 +1,7 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:solotravel/screens/Login.dart';
 
 class ProfileScreen extends StatefulWidget {
   static ProfileScreen _instance = new ProfileScreen._();
@@ -14,6 +15,29 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  _goLogin() {
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            opaque: false,
+            transitionsBuilder:
+                (___, Animation<double> animation, ____, Widget child) {
+              return FadeTransition(
+                  opacity:
+                      Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+                  child: ScaleTransition(
+                    scale:
+                        Tween<double>(begin: 0.9, end: 1.0).animate(animation),
+                    child: child,
+                  ),
+              );
+            },
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) {
+              return LoginScreen();
+            }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -45,17 +69,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
-                Container(
-                  height: 68,
-                  width: 68,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.all(Radius.circular(68 / 2))),
-                  child: Center(
-                    child: Icon(CommunityMaterialIcons.account,
-                        size: 40, color: Colors.grey),
-                  ),
-                )
+                InkWell(
+                    onTap: _goLogin,
+                    child: Container(
+                      height: 68,
+                      width: 68,
+                      decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(68 / 2))),
+                      child: Center(
+                        child: Icon(CommunityMaterialIcons.account,
+                            size: 40, color: Colors.grey),
+                      ),
+                    ))
               ],
             )),
         Container(
@@ -399,7 +426,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: <Widget>[
                   Expanded(
                       child: Container(
-                    margin: const EdgeInsets.only(bottom: 16, right: 8,),
+                    margin: const EdgeInsets.only(
+                      bottom: 16,
+                      right: 8,
+                    ),
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -426,7 +456,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     Radius.circular(4))),
                                             child: Center(
                                                 child: Icon(
-                                              CommunityMaterialIcons.google_circles_communities,
+                                              CommunityMaterialIcons
+                                                  .google_circles_communities,
                                               size: 14,
                                               color: Colors.white,
                                             ))),
@@ -487,93 +518,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   )),
                   Expanded(
                       child: Container(
-                        margin: const EdgeInsets.only(bottom: 16, left: 8),
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                            color: Colors.white),
-                        child: Column(
-                          children: <Widget>[
-                            InkWell(
-                                child: Container(
-                                  padding: const EdgeInsets.only(bottom: 8),
-                                  child: Column(
+                    margin: const EdgeInsets.only(bottom: 16, left: 8),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        color: Colors.white),
+                    child: Column(
+                      children: <Widget>[
+                        InkWell(
+                            child: Container(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Column(
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                      child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 48),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                            padding: const EdgeInsets.all(4),
+                                            decoration: BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(4))),
+                                            child: Center(
+                                                child: Icon(
+                                              CommunityMaterialIcons.leaf,
+                                              size: 14,
+                                              color: Colors.white,
+                                            ))),
+                                        Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 8),
+                                            child: Text(
+                                              "Breath",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xffbfbfbf),
+                                                  fontWeight: FontWeight.bold),
+                                            ))
+                                      ],
+                                    ),
+                                  )),
+                                ],
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                      child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: <Widget>[
-                                      Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(bottom: 48),
-                                                child: Row(
-                                                  children: <Widget>[
-                                                    Container(
-                                                        padding: const EdgeInsets.all(4),
-                                                        decoration: BoxDecoration(
-                                                            color: Colors.green,
-                                                            borderRadius: BorderRadius.all(
-                                                                Radius.circular(4))),
-                                                        child: Center(
-                                                            child: Icon(
-                                                              CommunityMaterialIcons
-                                                                  .leaf,
-                                                              size: 14,
-                                                              color: Colors.white,
-                                                            ))),
-                                                    Padding(
-                                                        padding:
-                                                        const EdgeInsets.only(left: 8),
-                                                        child: Text(
-                                                          "Breath",
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              color: Color(0xffbfbfbf),
-                                                              fontWeight: FontWeight.bold),
-                                                        ))
-                                                  ],
-                                                ),
-                                              )),
-                                        ],
+                                      Text(
+                                        "100",
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            color: Colors.black87,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                      Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                              child: Row(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: <Widget>[
-                                                  Text(
-                                                    "100",
-                                                    style: TextStyle(
-                                                        fontSize: 24,
-                                                        color: Colors.black87,
-                                                        fontWeight: FontWeight.bold),
-                                                  ),
-                                                  Padding(
-                                                      padding: const EdgeInsets.only(
-                                                          bottom: 4, left: 4),
-                                                      child: Text(
-                                                        "min",
-                                                        style: TextStyle(
-                                                            fontSize: 14,
-                                                            color: Color(0xffbfbfbf),
-                                                            fontWeight: FontWeight.bold),
-                                                      )),
-                                                ],
-                                              )),
-                                          Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 6, left: 4),
-                                              child: Icon(
-                                                  CommunityMaterialIcons.chevron_right,
-                                                  size: 16,
-                                                  color: Color(0xffbfbfbf)))
-                                        ],
-                                      )
+                                      Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 4, left: 4),
+                                          child: Text(
+                                            "min",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xffbfbfbf),
+                                                fontWeight: FontWeight.bold),
+                                          )),
                                     ],
-                                  ),
-                                )),
-                          ],
-                        ),
-                      ))
+                                  )),
+                                  Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 6, left: 4),
+                                      child: Icon(
+                                          CommunityMaterialIcons.chevron_right,
+                                          size: 16,
+                                          color: Color(0xffbfbfbf)))
+                                ],
+                              )
+                            ],
+                          ),
+                        )),
+                      ],
+                    ),
+                  ))
                 ],
               )
             ],

@@ -5,41 +5,40 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class FocusScreen extends StatefulWidget {
-  FocusScreen();
+class BreathScreen extends StatefulWidget {
+  BreathScreen();
 
   @override
-  _FocusScreenState createState() => _FocusScreenState();
+  _BreathScreenState createState() => _BreathScreenState();
 }
 
-class _FocusScreenState extends State<FocusScreen> {
+class _BreathScreenState extends State<BreathScreen> {
   List listTime = [
+    '01',
+    '02',
+    '03',
+    '04',
     '05',
+    '06',
+    '07',
     '08',
+    '09',
     '10',
-    '15',
-    '20',
-    '25',
-    '30',
-    '35',
-    '40',
-    '45',
-    '50',
-    '55',
-    '60',
-    '70',
-    '80',
-    '90',
-    '100',
-    '110',
-    '120',
-    '130',
-    '140',
-    '150',
-    '160',
-    '170',
-    '180'
+    '11',
+    '12',
+    '13',
+    '14',
+    '15'
   ];
+
+  int selectedIndex = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +69,7 @@ class _FocusScreenState extends State<FocusScreen> {
                 ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
-              title: Text("Focus"),
+              title: Text("Breath"),
             ),
             body: SafeArea(
               child: Column(
@@ -97,6 +96,9 @@ class _FocusScreenState extends State<FocusScreen> {
                                 squeeze: 1.45,
                                 itemExtent: 50,
                                 onSelectedItemChanged: (int index) {
+                                  setState(() {
+                                    selectedIndex = index;
+                                  });
                                 },
                                 children: <Widget>[
                                   ...(listTime.map((t) => Center(
@@ -129,6 +131,15 @@ class _FocusScreenState extends State<FocusScreen> {
                             ],
                           )),
                     ))),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 8),
+                    child: Text(
+                      "${((selectedIndex+1)*97/15).round()} breaths",
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white.withOpacity(0.5)),
+                    ),
                   ),
                   Container(
                       child: Center(
@@ -197,7 +208,7 @@ class _FocusScreenState extends State<FocusScreen> {
                                                                   bottom: 16),
                                                           child: Center(
                                                             child: Text(
-                                                              "Focus Mode",
+                                                              "Breath Method",
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .grey,
@@ -218,7 +229,7 @@ class _FocusScreenState extends State<FocusScreen> {
                                                               height: 40,
                                                               decoration: BoxDecoration(
                                                                   color: Colors
-                                                                      .amber,
+                                                                      .green,
                                                                   borderRadius:
                                                                       BorderRadius.all(
                                                                           Radius.circular(48 /
@@ -226,7 +237,7 @@ class _FocusScreenState extends State<FocusScreen> {
                                                               child: Center(
                                                                 child: Icon(
                                                                   FontAwesomeIcons
-                                                                      .clock,
+                                                                      .infinity,
                                                                   size: 24,
                                                                   color: Colors
                                                                       .white,
@@ -249,17 +260,16 @@ class _FocusScreenState extends State<FocusScreen> {
                                                                   children: <
                                                                       Widget>[
                                                                     Text(
-                                                                      "Timer Mode",
+                                                                      "Balanced Breath",
                                                                       style: TextStyle(
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
+                                                                          fontWeight: FontWeight.bold,
                                                                           fontSize:
                                                                               16,
                                                                           color:
                                                                               Colors.black87),
                                                                     ),
                                                                     Text(
-                                                                      "Set a timer, stay focused",
+                                                                      "Improve mood, and relieve stress",
                                                                       style: TextStyle(
                                                                           fontWeight: FontWeight
                                                                               .bold,
@@ -284,73 +294,7 @@ class _FocusScreenState extends State<FocusScreen> {
                                                               height: 40,
                                                               decoration: BoxDecoration(
                                                                   color: Colors
-                                                                      .deepOrange,
-                                                                  borderRadius:
-                                                                      BorderRadius.all(
-                                                                          Radius.circular(48 /
-                                                                              2))),
-                                                              child: Center(
-                                                                child: Icon(
-                                                                  CommunityMaterialIcons
-                                                                      .clock,
-                                                                  size: 24,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .only(
-                                                                left: 16,
-                                                              ),
-                                                              child: Column(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .min,
-                                                                  children: <
-                                                                      Widget>[
-                                                                    Text(
-                                                                      "Work Mode",
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          fontSize:
-                                                                              16,
-                                                                          color:
-                                                                              Colors.black87),
-                                                                    ),
-                                                                    Text(
-                                                                      "Based on Pomodoro Techniques",
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          fontSize:
-                                                                              13,
-                                                                          color:
-                                                                              Colors.grey),
-                                                                    ),
-                                                                  ]),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      )),
-                                                      InkWell(
-                                                          child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(16),
-                                                        child: Row(
-                                                          children: <Widget>[
-                                                            Container(
-                                                              width: 40,
-                                                              height: 40,
-                                                              decoration: BoxDecoration(
-                                                                  color: Colors
-                                                                      .pink,
+                                                                      .blueAccent,
                                                                   borderRadius:
                                                                       BorderRadius.all(
                                                                           Radius.circular(48 /
@@ -381,7 +325,7 @@ class _FocusScreenState extends State<FocusScreen> {
                                                                   children: <
                                                                       Widget>[
                                                                     Text(
-                                                                      "Infinite Mode",
+                                                                      "4-7-8 Breath",
                                                                       style: TextStyle(
                                                                           fontWeight: FontWeight
                                                                               .bold,
@@ -391,7 +335,7 @@ class _FocusScreenState extends State<FocusScreen> {
                                                                               Colors.black87),
                                                                     ),
                                                                     Text(
-                                                                      "Set a count-up timer at anytime",
+                                                                      "Relax mind and body to fall asleep quickly",
                                                                       style: TextStyle(
                                                                           fontWeight: FontWeight
                                                                               .bold,
@@ -420,31 +364,13 @@ class _FocusScreenState extends State<FocusScreen> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8),
-                                    child: Text("Focus Mode",
+                                    child: Text("Breath Method",
                                         style: TextStyle(
                                             fontSize: 14,
                                             color: Color(0x68ffffff))),
                                   )
                                 ],
                               ))),
-                      Expanded(
-                          child: InkWell(
-                              child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Icon(
-                            FontAwesomeIcons.tag,
-                            size: 20,
-                            color: Colors.white.withOpacity(0.6),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Text("Focus tag",
-                                style: TextStyle(
-                                    fontSize: 14, color: Color(0x68ffffff))),
-                          )
-                        ],
-                      ))),
                       Expanded(
                           child: InkWell(
                               child: Column(

@@ -132,7 +132,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0,  iconTheme: IconThemeData(
+        color: Colors.black45, //change your color here
+      ),),
+      body: SafeArea(
+          child: Center(
         child: Column(
           children: <Widget>[
             RaisedButton(
@@ -149,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ],
         ),
-      ),
+      )),
     );
   }
 

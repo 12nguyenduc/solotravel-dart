@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
 
+import 'Breath.dart';
 import 'Focus.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -71,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       if (controller.page - controller.page.floor() == 0) {
         int page = int.parse('${controller.page.floor()}');
-        if(selectedPage!=page){
+        if (selectedPage != page) {
           selectedPage = page;
           _playAudio(pages[page]['audio'], image: pages[page]['image']);
         }
@@ -174,19 +175,46 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  _goFocus(){
-    Navigator.push(context, PageRouteBuilder(
-      opaque: false,
-      transitionsBuilder: (___, Animation<double> animation, ____, Widget child) {
-        return ScaleTransition(
-          scale: animation,
-          child: ScaleTransition(
-            scale: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
-            child: child,
-          ),
-        );
-      }, pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) { return FocusScreen(); }
-    ));
+  _goFocus() {
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            opaque: false,
+            transitionsBuilder:
+                (___, Animation<double> animation, ____, Widget child) {
+              return  FadeTransition(
+                  opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+                  child: ScaleTransition(
+                    scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+                    child: child,
+                  ),
+              );
+            },
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) {
+              return FocusScreen();
+            }));
+  }
+
+  _goBreath() {
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            opaque: false,
+            transitionsBuilder:
+                (___, Animation<double> animation, ____, Widget child) {
+              return  FadeTransition(
+                  opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+                  child: ScaleTransition(
+                    scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+                    child: child,
+                  ),
+              );
+            },
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) {
+              return BreathScreen();
+            }));
   }
 
   @override
@@ -253,10 +281,39 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(child: Container()),
               Row(
                 children: <Widget>[
-                 Expanded(
+                  Expanded(
                     child: InkWell(
                       onTap: _goFocus,
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Container(
+                              width: 56,
+                              height: 56,
+                              decoration: BoxDecoration(
+                                  color: Color(0x60ffffff),
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(56 / 2))),
+                              child: Center(
+                                  child: Icon(
+                                CommunityMaterialIcons.radiobox_marked,
+                                size: 28,
+                                color: Colors.white,
+                              ))),
+                          Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 8, bottom: 16),
+                              child: Text(
+                                "Focus",
+                                style: TextStyle(
+                                    fontSize: 14, color: Color(0x99ffffff)),
+                              ))
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
@@ -268,37 +325,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     BorderRadius.all(Radius.circular(56 / 2))),
                             child: Center(
                                 child: Icon(
-                              CommunityMaterialIcons.radiobox_marked,
+                              CommunityMaterialIcons.weather_night,
                               size: 28,
                               color: Colors.white,
                             ))),
-                        Padding(
-                            padding: const EdgeInsets.only(top: 8, bottom: 16),
-                            child: Text(
-                              "Focus",
-                              style: TextStyle(
-                                  fontSize: 14, color: Color(0x99ffffff)),
-                            ))
-                      ],
-                    ),
-                  ),),
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Container(
-                            width: 56,
-                            height: 56,
-                            decoration: BoxDecoration(
-                                color: Color(0x60ffffff),
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(56 / 2))),
-                            child: Center(
-                                child: Icon(
-                                  CommunityMaterialIcons.weather_night,
-                                  size: 28,
-                                  color: Colors.white,
-                                ))),
                         Padding(
                             padding: const EdgeInsets.only(top: 8, bottom: 16),
                             child: Text(
@@ -319,13 +349,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             decoration: BoxDecoration(
                                 color: Color(0x60ffffff),
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(56 / 2))),
+                                    BorderRadius.all(Radius.circular(56 / 2))),
                             child: Center(
                                 child: Icon(
-                                  CommunityMaterialIcons.circle_outline,
-                                  size: 28,
-                                  color: Colors.white,
-                                ))),
+                              CommunityMaterialIcons.circle_outline,
+                              size: 28,
+                              color: Colors.white,
+                            ))),
                         Padding(
                             padding: const EdgeInsets.only(top: 8, bottom: 16),
                             child: Text(
@@ -337,7 +367,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Expanded(
-                    child: Column(
+                    child: InkWell(onTap: _goBreath, child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
@@ -346,13 +376,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             decoration: BoxDecoration(
                                 color: Color(0x60ffffff),
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(56 / 2))),
+                                    BorderRadius.all(Radius.circular(56 / 2))),
                             child: Center(
                                 child: Icon(
-                                  CommunityMaterialIcons.leaf,
-                                  size: 28,
-                                  color: Colors.white,
-                                ))),
+                              CommunityMaterialIcons.leaf,
+                              size: 28,
+                              color: Colors.white,
+                            ))),
                         Padding(
                             padding: const EdgeInsets.only(top: 8, bottom: 16),
                             child: Text(
@@ -362,8 +392,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ))
                       ],
                     ),
-                  ),
-
+                  )),
                 ],
               )
             ],

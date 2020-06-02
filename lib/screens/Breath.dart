@@ -4,6 +4,7 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 
 class BreathScreen extends StatefulWidget {
   BreathScreen();
@@ -77,18 +78,16 @@ class _BreathScreenState extends State<BreathScreen> {
                   Expanded(
                     child: Container(
                         child: Center(
-                            child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                      child: Container(
-                          width: 200,
-                          height: 200,
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100)),
-                              border: Border.all(
-                                  color: Colors.white.withOpacity(0.3))),
+                            child: Container(
+                          width: 250,
+                          height: 250,
                           child: Stack(
                             children: <Widget>[
+                              Lottie.asset(
+                                'assets/images/blob.json',
+                                width: 250,
+                                height: 250,
+                              ),
                               CupertinoPicker(
                                 backgroundColor: Colors.transparent,
                                 diameterRatio: 1.1,
@@ -114,7 +113,7 @@ class _BreathScreenState extends State<BreathScreen> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     Text(
-                                      '0000',
+                                      '00000',
                                       style: TextStyle(
                                           fontSize: 32,
                                           color: Colors.transparent),
@@ -129,7 +128,7 @@ class _BreathScreenState extends State<BreathScreen> {
                                 ),
                               )
                             ],
-                          )),
+                          )
                     ))),
                   ),
                   Padding(

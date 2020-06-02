@@ -46,9 +46,9 @@ class _MainScreenState extends State<MainScreen> {
             elevation: selectedIndex==0?0:1,
             currentIndex: selectedIndex,
             unselectedItemColor:
-            selectedIndex == 0 ? Color(0xff60595c) : Color(0xffe7e7e7),
+            selectedIndex == 0 ? Colors.grey[600] : Color(0xffe7e7e7),
             selectedItemColor:
-            selectedIndex == 0 ? Color(0xffb3b0b1) : Color(0xff404040),
+            selectedIndex == 0 ? Colors.white60 : Colors.grey[600],
             onTap: _onItemTapped,
             showSelectedLabels: false,
             showUnselectedLabels: false,

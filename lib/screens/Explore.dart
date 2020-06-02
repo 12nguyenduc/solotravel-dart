@@ -6,6 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solotravel/screens/SoundScene.dart';
 
+import 'Pratice.dart';
+
 class ExploreScreen extends StatefulWidget {
   static ExploreScreen _instance = new ExploreScreen._();
 
@@ -23,24 +25,40 @@ class _ExploreScreenState extends State<ExploreScreen> {
     super.initState();
   }
 
-  _goSoundScene(){
+  _goSoundScene() {
     Navigator.push(
         context,
-        PageRouteBuilder(
-            transitionsBuilder:
-                (___, Animation<double> animation, ____, Widget child) {
-              return  FadeTransition(
-                opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
-                child: ScaleTransition(
-                  scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
-                  child: child,
-                ),
-              );
-            },
-            pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) {
-              return SoundSceneScreen();
-            }));
+        PageRouteBuilder(transitionsBuilder:
+            (___, Animation<double> animation, ____, Widget child) {
+          return FadeTransition(
+            opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+              child: child,
+            ),
+          );
+        }, pageBuilder: (BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          return SoundSceneScreen();
+        }));
+  }
+
+  _goPractice() {
+    Navigator.push(
+        context,
+        PageRouteBuilder(transitionsBuilder:
+            (___, Animation<double> animation, ____, Widget child) {
+          return FadeTransition(
+            opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+              child: child,
+            ),
+          );
+        }, pageBuilder: (BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          return PracticeScreen();
+        }));
   }
 
   @override
@@ -77,7 +95,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 children: <Widget>[
                   Expanded(
                       child: InkWell(
-                    onTap: () {},
+                    onTap: _goSoundScene,
                     child: Column(
                       children: <Widget>[
                         Container(
@@ -191,71 +209,80 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   )),
                 ],
               )),
-          Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Expanded(
-                      child: Text("Sound",
-                          style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xff0f0f0f),
-                              fontSize: 24))),
-                  InkWell(
-                    onTap: () {},
-                    child: Text("More",
-                        style:
-                            TextStyle(color: Color(0xfffa5857), fontSize: 14)),
-                  )
-                ],
-              )),
-          Container(
-            height:
-                (MediaQuery.of(context).size.width - 32 - 8 * 4) / 3 * 4 / 3,
-            // give it a fixed height constraint
-            // child ListView
-            child: ListView.builder(
-              physics: ClampingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 10,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  width: (MediaQuery.of(context).size.width - 32 - 8 * 4) / 3,
-                  margin: const EdgeInsets.only(left: 16),
-                  decoration: BoxDecoration(
-                      color: Color(0xfff5f5f5),
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Center(
-                        child: Column(
-                      mainAxisSize: MainAxisSize.min,
+          InkWell(
+            onTap: _goSoundScene,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        ClipRRect(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(58 / 2)),
-                            child: Image.asset(
-                              'assets/images/adventure.jpg',
-                              width: 58,
-                              height: 58,
-                              fit: BoxFit.cover,
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.only(
-                              top: 12,
-                            ),
-                            child: Text(
-                              "Galicier",
-                              style: TextStyle(color: Color(0xffc2c2c2)),
-                            ))
+                        Expanded(
+                            child: Text("Sound",
+                                style: TextStyle(
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xff0f0f0f),
+                                    fontSize: 24))),
+                        Text("More",
+                            style: TextStyle(
+                                color: Color(0xfffa5857), fontSize: 14)),
                       ],
                     )),
+                Container(
+                  height: (MediaQuery.of(context).size.width - 32 - 8 * 4) /
+                      3 *
+                      4 /
+                      3,
+                  // give it a fixed height constraint
+                  // child ListView
+                  child: ListView.builder(
+                    physics: ClampingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: 10,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        width:
+                            (MediaQuery.of(context).size.width - 32 - 8 * 4) /
+                                3,
+                        margin: const EdgeInsets.only(left: 16),
+                        decoration: BoxDecoration(
+                            color: Color(0xfff5f5f5),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        child: InkWell(
+                          onTap: _goPractice,
+                          child: Center(
+                              child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(58 / 2)),
+                                  child: Image.asset(
+                                    'assets/images/adventure.jpg',
+                                    width: 58,
+                                    height: 58,
+                                    fit: BoxFit.cover,
+                                  )),
+                              Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 12,
+                                  ),
+                                  child: Text(
+                                    "Galicier",
+                                    style: TextStyle(color: Color(0xffc2c2c2)),
+                                  ))
+                            ],
+                          )),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             ),
           ),
           Padding(
@@ -405,90 +432,93 @@ class _ExploreScreenState extends State<ExploreScreen> {
               print("sleep");
             },
             child: Container(
-              decoration: BoxDecoration(color: Color(0xff230b39)),
+                decoration: BoxDecoration(color: Color(0xff230b39)),
                 child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Padding(
-                    padding: const EdgeInsets.only(top: 24, bottom: 36, left: 16, right: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Expanded(
-                            child: Text("Sleep",
-                                style: TextStyle(
-                                    fontFamily: 'Roboto',
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white,
-                                    fontSize: 24))),
-                        InkWell(
-                          onTap: () {},
-                          child: Text("More",
-                              style: TextStyle(
-                                  color: Color(0xfffa5857), fontSize: 14)),
-                        )
-                      ],
-                    )),
-                Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: GridView.count(
-                      shrinkWrap: true,
-                      childAspectRatio: 1.1,
-                      physics: new NeverScrollableScrollPhysics(),
-                      // crossAxisCount is the number of columns
-                      crossAxisCount: 2,
-                      // This creates two columns with two items in each column
-                      children: List.generate(4, (index) {
-                        return InkWell(
-                            onTap: () {},
-                            child: Container(
-                                margin: new EdgeInsets.only(
-                                    left: (index % 2 == 0 ? 0 : 8)),
-                                child: Column(
-                                  crossAxisAlignment: index % 2 == 0
-                                      ? CrossAxisAlignment.start
-                                      : CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    ClipRRect(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8)),
-                                        child: Image.asset(
-                                          'assets/images/adventure.jpg',
-                                          width: (MediaQuery.of(context)
-                                                      .size
-                                                      .width -
-                                                  32 -
-                                                  16) /
-                                              2,
-                                          height: ((MediaQuery.of(context)
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Padding(
+                        padding: const EdgeInsets.only(
+                            top: 24, bottom: 36, left: 16, right: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Expanded(
+                                child: Text("Sleep",
+                                    style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                        fontSize: 24))),
+                            InkWell(
+                              onTap: () {},
+                              child: Text("More",
+                                  style: TextStyle(
+                                      color: Color(0xfffa5857), fontSize: 14)),
+                            )
+                          ],
+                        )),
+                    Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: GridView.count(
+                          shrinkWrap: true,
+                          childAspectRatio: 1.1,
+                          physics: new NeverScrollableScrollPhysics(),
+                          // crossAxisCount is the number of columns
+                          crossAxisCount: 2,
+                          // This creates two columns with two items in each column
+                          children: List.generate(4, (index) {
+                            return InkWell(
+                                onTap: () {},
+                                child: Container(
+                                    margin: new EdgeInsets.only(
+                                        left: (index % 2 == 0 ? 0 : 8)),
+                                    child: Column(
+                                      crossAxisAlignment: index % 2 == 0
+                                          ? CrossAxisAlignment.start
+                                          : CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        ClipRRect(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(8)),
+                                            child: Image.asset(
+                                              'assets/images/adventure.jpg',
+                                              width: (MediaQuery.of(context)
                                                           .size
                                                           .width -
                                                       32 -
                                                       16) /
-                                                  2) *
-                                              9 /
-                                              16,
-                                          fit: BoxFit.cover,
-                                        )),
-                                    Padding(
-                                        padding: const EdgeInsets.only(top: 8),
-                                        child: Text("A Trip to Dunhuang",
-                                            style: TextStyle(
-                                                color: Color(0xfff0f0f0),
-                                                fontSize: 14))),
-                                    Padding(
-                                        padding: const EdgeInsets.only(top: 4),
-                                        child: Text("20 MIN - SINGLES",
-                                            style: TextStyle(
-                                                color: Color(0xffc2c2c2),
-                                                fontSize: 12))),
-                                  ],
-                                )));
-                      }),
-                    ))
-              ],
-            )),
+                                                  2,
+                                              height: ((MediaQuery.of(context)
+                                                              .size
+                                                              .width -
+                                                          32 -
+                                                          16) /
+                                                      2) *
+                                                  9 /
+                                                  16,
+                                              fit: BoxFit.cover,
+                                            )),
+                                        Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 8),
+                                            child: Text("A Trip to Dunhuang",
+                                                style: TextStyle(
+                                                    color: Color(0xfff0f0f0),
+                                                    fontSize: 14))),
+                                        Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 4),
+                                            child: Text("20 MIN - SINGLES",
+                                                style: TextStyle(
+                                                    color: Color(0xffc2c2c2),
+                                                    fontSize: 12))),
+                                      ],
+                                    )));
+                          }),
+                        ))
+                  ],
+                )),
           ),
           Padding(
               padding: const EdgeInsets.all(16),
@@ -605,35 +635,51 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ),
           ...List.generate(12, (index) {
             return Container(
-                margin: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+                margin: const EdgeInsets.only(
+                    left: 16, right: 16, top: 16, bottom: 16),
                 child: InkWell(
-              onTap: (){},
-              child: Row(
+                    onTap: () {},
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Expanded(child:
-                          Column(
+                        Expanded(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.all(Radius.circular(4))),
-                              child: Text('Meditation', style: TextStyle(fontSize: 12, color: Colors.red[400]),)
-                            ),
+                              Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(4))),
+                                  child: Text(
+                                    'Meditation',
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.red[400]),
+                                  )),
                               Padding(
-                                padding: const EdgeInsets.only(top: 8, bottom: 4),
-                                child:
-                                  Text('Meditation in Everyday Moments', style: TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w500),)
-                              )
-                          ],)
-                          ,),
+                                  padding:
+                                      const EdgeInsets.only(top: 8, bottom: 4),
+                                  child: Text(
+                                    'Meditation in Everyday Moments',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w500),
+                                  ))
+                            ],
+                          ),
+                        ),
                         ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          child: Image.asset('assets/images/adventure.jpg', width: 100, height: 100, fit: BoxFit.cover,)
-                        )
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            child: Image.asset(
+                              'assets/images/adventure.jpg',
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ))
                       ],
-              ))
-            );
+                    )));
           }),
           Padding(
               padding: const EdgeInsets.only(top: 24, bottom: 24),
@@ -651,7 +697,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
             height: MediaQuery.of(context).size.width * 323 / 1250,
             color: Colors.grey,
           ),
-
         ],
       )),
     );
@@ -671,6 +716,24 @@ class _PageAutoScrollState extends State<PageAutoScroll> {
   PageController _pageController = PageController(
     initialPage: 0,
   );
+
+  _goPractice() {
+    Navigator.push(
+        context,
+        PageRouteBuilder(transitionsBuilder:
+            (___, Animation<double> animation, ____, Widget child) {
+          return FadeTransition(
+            opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+              child: child,
+            ),
+          );
+        }, pageBuilder: (BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          return PracticeScreen();
+        }));
+  }
 
   @override
   void initState() {
@@ -698,37 +761,43 @@ class _PageAutoScrollState extends State<PageAutoScroll> {
         child: PageView(
           controller: _pageController,
           children: [
-            Container(
-              margin: const EdgeInsets.only(left: 16, right: 16),
+            InkWell(
+                onTap: _goPractice,
+                child: Container(
+                  margin: const EdgeInsets.only(left: 16, right: 16),
 //          height: MediaQuery.of(context).size.width*9/16,
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                child: Image.network(
-                  "http://localhost:8997/i0.jpg",
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(left: 16, right: 16),
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                child: Image.network(
-                  "http://localhost:8997/i1.jpg",
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(left: 16, right: 16),
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                child: Image.network(
-                  "http://localhost:8997/i2.jpg",
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    child: Image.network(
+                      "http://localhost:8997/i0.jpg",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )),
+            InkWell(
+                onTap: _goPractice,
+                child: Container(
+                  margin: const EdgeInsets.only(left: 16, right: 16),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                    child: Image.network(
+                      "http://localhost:8997/i1.jpg",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )),
+            InkWell(
+                onTap: _goPractice,
+                child: Container(
+                  margin: const EdgeInsets.only(left: 16, right: 16),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                    child: Image.network(
+                      "http://localhost:8997/i2.jpg",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )),
           ],
         ));
   }

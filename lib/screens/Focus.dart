@@ -79,13 +79,13 @@ class _FocusScreenState extends State<FocusScreen> {
                     child: Container(
                         child: Center(
                             child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                      borderRadius: BorderRadius.all(Radius.circular(250/2)),
                       child: Container(
-                          width: 200,
-                          height: 200,
+                          width: 250,
+                          height: 250,
                           decoration: BoxDecoration(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(100)),
+                                  BorderRadius.all(Radius.circular(250/2)),
                               border: Border.all(
                                   color: Colors.white.withOpacity(0.3))),
                           child: Stack(

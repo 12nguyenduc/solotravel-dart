@@ -17,6 +17,7 @@ class SoundSceneScreen extends StatefulWidget {
 class _SoundSceneScreenState extends State<SoundSceneScreen> {
   int selectedIndex = 0;
 
+
   List listCategory = [
     'All',
     'Sleep',
@@ -28,9 +29,20 @@ class _SoundSceneScreenState extends State<SoundSceneScreen> {
     'Melody'
   ];
 
+  ScrollController scrollController = new ScrollController();
+
+  double offsetHeader = 0;
+
+  int itemCount = Random().nextInt(100);
+
   @override
   void initState() {
     super.initState();
+    scrollController.addListener(() {
+      setState(() {
+        offsetHeader = scrollController.offset>=0?scrollController.offset>50?50:scrollController.offset:0;
+      });
+    });
   }
 
   @override
@@ -40,11 +52,21 @@ class _SoundSceneScreenState extends State<SoundSceneScreen> {
           backgroundColor: Colors.white,
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.black87),
+            title: Opacity(
+                opacity: offsetHeader/50,
+                child:  Text(
+                  "Sound Scene",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87),
+                ))
         ),
         body: Container(
             color: Colors.white,
             child: SafeArea(
             child: ListView(
+              controller: scrollController,
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(top: 16, left: 16),
@@ -64,7 +86,6 @@ class _SoundSceneScreenState extends State<SoundSceneScreen> {
                   style: TextStyle(fontSize: 14, color: Colors.grey),
                 )),
             StickyHeader(
-
               header: Container(
                   color: Colors.white,
                   height: 40,
@@ -108,7 +129,7 @@ class _SoundSceneScreenState extends State<SoundSceneScreen> {
                   GridView.builder(
                     physics: ScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: Random().nextInt(100),
+                    itemCount: itemCount,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
                         child: Column(
@@ -121,15 +142,9 @@ class _SoundSceneScreenState extends State<SoundSceneScreen> {
                                         BorderRadius.all(Radius.circular(8)),
                                     child: Image.asset(
                                       'assets/images/adventure.jpg',
-                                      width: MediaQuery.of(context).size.width /
-                                              3 -
-                                          32,
+                                      width: MediaQuery.of(context).size.width /3 -32,
                                       height:
-                                          (MediaQuery.of(context).size.width /
-                                                      3 -
-                                                  32) *
-                                              14 /
-                                              9,
+                                          (MediaQuery.of(context).size.width / 3 -32) *14 /9,
                                       fit: BoxFit.cover,
                                     ),
                                   ),

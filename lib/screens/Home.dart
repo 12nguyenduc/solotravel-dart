@@ -7,9 +7,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:solotravel/screens/HomeNap.dart';
+import 'package:solotravel/screens/HomeSleep.dart';
+import 'package:solotravel/screens/Meditation.dart';
 
 import 'Breath.dart';
-import 'Focus.dart';
+import 'HomeFocus.dart';
 
 class HomeScreen extends StatefulWidget {
   static HomeScreen _instance = new HomeScreen._();
@@ -196,6 +199,49 @@ class _HomeScreenState extends State<HomeScreen> {
             }));
   }
 
+  _goSleep() {
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            opaque: false,
+            transitionsBuilder:
+                (___, Animation<double> animation, ____, Widget child) {
+              return  FadeTransition(
+                opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+                child: ScaleTransition(
+                  scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+                  child: child,
+                ),
+              );
+            },
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) {
+              return HomeSleepScreen();
+            }));
+  }
+
+  _goNap() {
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            opaque: false,
+            transitionsBuilder:
+                (___, Animation<double> animation, ____, Widget child) {
+              return  FadeTransition(
+                opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+                child: ScaleTransition(
+                  scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+                  child: child,
+                ),
+              );
+            },
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) {
+              return HomeNapScreen();
+            }));
+  }
+
+
   _goBreath() {
     Navigator.push(
         context,
@@ -216,6 +262,8 @@ class _HomeScreenState extends State<HomeScreen> {
               return BreathScreen();
             }));
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -313,7 +361,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Expanded(
-                    child: Column(
+                    child: InkWell(
+                      onTap: _goSleep,
+                      child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
@@ -338,9 +388,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             ))
                       ],
                     ),
-                  ),
+                  )),
                   Expanded(
-                    child: Column(
+                    child: InkWell(
+                      onTap: _goNap,
+                      child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
@@ -359,13 +411,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         Padding(
                             padding: const EdgeInsets.only(top: 8, bottom: 16),
                             child: Text(
-                              "Snap",
+                              "Nap",
                               style: TextStyle(
                                   fontSize: 14, color: Color(0x99ffffff)),
                             ))
                       ],
                     ),
-                  ),
+                  )),
                   Expanded(
                     child: InkWell(onTap: _goBreath, child: Column(
                       mainAxisSize: MainAxisSize.min,

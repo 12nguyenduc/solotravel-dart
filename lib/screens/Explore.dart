@@ -4,8 +4,10 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:solotravel/screens/Sleep.dart';
 import 'package:solotravel/screens/SoundScene.dart';
 
+import 'Meditation.dart';
 import 'Pratice.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -60,6 +62,47 @@ class _ExploreScreenState extends State<ExploreScreen> {
           return PracticeScreen();
         }));
   }
+
+
+  _goSleep() {
+    Navigator.push(
+        context,
+        PageRouteBuilder(transitionsBuilder:
+            (___, Animation<double> animation, ____, Widget child) {
+          return FadeTransition(
+            opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+              child: child,
+            ),
+          );
+        }, pageBuilder: (BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          return SleepScreen();
+        }));
+  }
+
+  _goMeditation() {
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            opaque: false,
+            transitionsBuilder:
+                (___, Animation<double> animation, ____, Widget child) {
+              return  FadeTransition(
+                opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+                child: ScaleTransition(
+                  scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+                  child: child,
+                ),
+              );
+            },
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) {
+              return MeditationScreen();
+            }));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +166,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   )),
                   Expanded(
                       child: InkWell(
-                    onTap: () {},
+                    onTap: _goMeditation,
                     child: Container(
                         margin: const EdgeInsets.all(0),
                         child: Column(
@@ -153,7 +196,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   )),
                   Expanded(
                       child: InkWell(
-                    onTap: _goSoundScene,
+                    onTap: _goSleep,
                     child: Column(
                       children: <Widget>[
                         Container(
@@ -285,153 +328,156 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ],
             ),
           ),
-          Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Expanded(
-                      child: Text("Minis",
-                          style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xff0f0f0f),
-                              fontSize: 24))),
-                  InkWell(
-                    onTap: () {},
-                    child: Text("More",
-                        style:
-                            TextStyle(color: Color(0xfffa5857), fontSize: 14)),
-                  )
-                ],
-              )),
-          Container(
-            height: (MediaQuery.of(context).size.width - 32 - 8 * 4) / 3,
-            // give it a fixed height constraint
-            // child ListView
-            child: ListView.builder(
-              itemCount: 10,
-              physics: ClampingScrollPhysics(),
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  width: (MediaQuery.of(context).size.width - 32 - 8 * 4) / 4.5,
-                  margin: const EdgeInsets.only(left: 16),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Center(
-                        child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Material(
-                            elevation: 3,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(58 / 2)),
-                            child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(58 / 2)),
-                                child: Image.asset(
-                                  'assets/images/adventure.jpg',
-                                  width: 58,
-                                  height: 58,
-                                  fit: BoxFit.cover,
-                                ))),
-                        Padding(
-                            padding: const EdgeInsets.only(
-                              top: 12,
-                            ),
-                            child: Text(
-                              "Galicier",
-                              style: TextStyle(color: Color(0xffc2c2c2)),
-                            ))
-                      ],
-                    )),
-                  ),
-                );
-              },
-            ),
-          ),
-          Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Expanded(
-                      child: Text("Meditation",
-                          style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xff0f0f0f),
-                              fontSize: 24))),
-                  InkWell(
-                    onTap: () {},
-                    child: Text("More",
-                        style:
-                            TextStyle(color: Color(0xfffa5857), fontSize: 14)),
-                  )
-                ],
-              )),
-          Padding(
-              padding: const EdgeInsets.all(16),
-              child: GridView.count(
-                shrinkWrap: true,
-                childAspectRatio: 1.1,
-                physics: new NeverScrollableScrollPhysics(),
-                // crossAxisCount is the number of columns
-                crossAxisCount: 2,
-                // This creates two columns with two items in each column
-                children: List.generate(8, (index) {
-                  return InkWell(
+          InkWell(
+            onTap: _goMeditation,
+            child: Column(children: <Widget>[
+            Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Expanded(
+                        child: Text("Minis",
+                            style: TextStyle(
+                                fontFamily: 'Roboto',
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xff0f0f0f),
+                                fontSize: 24))),
+                    InkWell(
                       onTap: () {},
-                      child: Container(
-                          margin: new EdgeInsets.only(
-                              left: (index % 2 == 0 ? 0 : 8)),
+                      child: Text("More",
+                          style:
+                          TextStyle(color: Color(0xfffa5857), fontSize: 14)),
+                    )
+                  ],
+                )),
+            Container(
+              height: (MediaQuery.of(context).size.width - 32 - 8 * 4) / 3,
+              // give it a fixed height constraint
+              // child ListView
+              child: ListView.builder(
+                itemCount: 10,
+                physics: ClampingScrollPhysics(),
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    width: (MediaQuery.of(context).size.width - 32 - 8 * 4) / 4.5,
+                    margin: const EdgeInsets.only(left: 16),
+                    child: InkWell(
+                      onTap: () {},
+                      child: Center(
                           child: Column(
-                            crossAxisAlignment: index % 2 == 0
-                                ? CrossAxisAlignment.start
-                                : CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              ClipRRect(
+                              Material(
+                                  elevation: 3,
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
-                                  child: Image.asset(
-                                    'assets/images/adventure.jpg',
-                                    width: (MediaQuery.of(context).size.width -
-                                            32 -
-                                            16) /
-                                        2,
-                                    height:
-                                        ((MediaQuery.of(context).size.width -
-                                                    32 -
-                                                    16) /
-                                                2) *
-                                            9 /
-                                            16,
-                                    fit: BoxFit.cover,
-                                  )),
+                                  BorderRadius.all(Radius.circular(58 / 2)),
+                                  child: ClipRRect(
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(58 / 2)),
+                                      child: Image.asset(
+                                        'assets/images/adventure.jpg',
+                                        width: 58,
+                                        height: 58,
+                                        fit: BoxFit.cover,
+                                      ))),
                               Padding(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: Text("A Trip to Dunhuang",
-                                      style: TextStyle(
-                                          color: Color(0xff0f0f0f),
-                                          fontSize: 14))),
-                              Padding(
-                                  padding: const EdgeInsets.only(top: 4),
-                                  child: Text("20 MIN - SINGLES",
-                                      style: TextStyle(
-                                          color: Color(0xffc2c2c2),
-                                          fontSize: 12))),
+                                  padding: const EdgeInsets.only(
+                                    top: 12,
+                                  ),
+                                  child: Text(
+                                    "Galicier",
+                                    style: TextStyle(color: Color(0xffc2c2c2)),
+                                  ))
                             ],
-                          )));
-                }),
-              )),
+                          )),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Expanded(
+                        child: Text("Meditation",
+                            style: TextStyle(
+                                fontFamily: 'Roboto',
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xff0f0f0f),
+                                fontSize: 24))),
+                    InkWell(
+                      onTap: () {},
+                      child: Text("More",
+                          style:
+                          TextStyle(color: Color(0xfffa5857), fontSize: 14)),
+                    )
+                  ],
+                )),
+            Padding(
+                padding: const EdgeInsets.all(16),
+                child: GridView.count(
+                  shrinkWrap: true,
+                  childAspectRatio: 1.1,
+                  physics: new NeverScrollableScrollPhysics(),
+                  // crossAxisCount is the number of columns
+                  crossAxisCount: 2,
+                  // This creates two columns with two items in each column
+                  children: List.generate(8, (index) {
+                    return InkWell(
+                        onTap: () {},
+                        child: Container(
+                            margin: new EdgeInsets.only(
+                                left: (index % 2 == 0 ? 0 : 8)),
+                            child: Column(
+                              crossAxisAlignment: index % 2 == 0
+                                  ? CrossAxisAlignment.start
+                                  : CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ClipRRect(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                    child: Image.asset(
+                                      'assets/images/adventure.jpg',
+                                      width: (MediaQuery.of(context).size.width -
+                                          32 -
+                                          16) /
+                                          2,
+                                      height:
+                                      ((MediaQuery.of(context).size.width -
+                                          32 -
+                                          16) /
+                                          2) *
+                                          9 /
+                                          16,
+                                      fit: BoxFit.cover,
+                                    )),
+                                Padding(
+                                    padding: const EdgeInsets.only(top: 8),
+                                    child: Text("A Trip to Dunhuang",
+                                        style: TextStyle(
+                                            color: Color(0xff0f0f0f),
+                                            fontSize: 14))),
+                                Padding(
+                                    padding: const EdgeInsets.only(top: 4),
+                                    child: Text("20 MIN - SINGLES",
+                                        style: TextStyle(
+                                            color: Color(0xffc2c2c2),
+                                            fontSize: 12))),
+                              ],
+                            )));
+                  }),
+                )),
+          ],),),
           InkWell(
-            onTap: () {
-              print("sleep");
-            },
-            child: Container(
+            onTap: _goSleep,
+            child:
+            Container(
                 decoration: BoxDecoration(color: Color(0xff230b39)),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

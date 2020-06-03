@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:solotravel/screens/Main.dart';
 import 'webthread/webthread.dart';
-
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,8 +12,12 @@ void main() {
 class MyApp extends StatelessWidget {
 
 
-  MyApp(){
-    new WebThread();
+  MyApp() {
+    WebThread();
+    WidgetsFlutterBinding.ensureInitialized();
+    FlutterDownloader.initialize(
+        debug: true // optional: set false to disable printing logs to console
+    );
   }
 
 

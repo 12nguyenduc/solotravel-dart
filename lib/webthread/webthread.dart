@@ -25,7 +25,6 @@ class WebThread {
         name: jsChannel,
         onMessageReceived: (JavascriptMessage message) {
           var response = json.decode(message.message);
-          myLog(response);
           subject.add(response);
         }),
   ].toSet();

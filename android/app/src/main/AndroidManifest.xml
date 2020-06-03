@@ -63,5 +63,14 @@
             android:name="io.fabric.ApiKey"
             android:value="caffaad5d1e22b7e54ad23ac7c44ae8aed9325a0"
             />
+        <provider
+                android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
+                android:authorities="${applicationId}.flutter_downloader.provider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/provider_paths"/>
+        </provider>
     </application>
 </manifest>

@@ -73,7 +73,7 @@ dependencies:
   flutter_native_web: ^1.0.3
   flutter_webview_plugin: ^0.3.11
   local_assets_server: ^1.0.2+5
-  assets_audio_player: ^1.6.0+2
+  assets_audio_player: ^2.0.0+3
   community_material_icon: ^3.5.95
 
   bmnav: ^0.3.4
@@ -81,6 +81,9 @@ dependencies:
 
   path_provider: ^1.6.10
   flutter_downloader: ^1.4.4
+
+  flutter_swiper: ^1.1.6
+  http: ^0.12.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

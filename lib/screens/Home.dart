@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
@@ -10,6 +11,8 @@ import 'package:page_transition/page_transition.dart';
 import 'package:solotravel/screens/HomeNap.dart';
 import 'package:solotravel/screens/HomeSleep.dart';
 import 'package:solotravel/screens/Meditation.dart';
+import 'package:solotravel/stores/HomeStore.dart';
+import 'package:solotravel/stores/SoundManagerStore.dart';
 
 import 'Breath.dart';
 import 'HomeFocus.dart';
@@ -31,90 +34,44 @@ class _HomeScreenState extends State<HomeScreen> {
   int selectedIndex = 0;
   int selectedPage = 0;
   bool isPlay = false;
-  final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer();
-
-  var pages = [
-    {
-      'audio': 'assets/audio/1050_daydream.mp3',
-      'image': 'http://localhost:8997/i0.jpg'
-    },
-    {
-      'audio': 'assets/audio/1931_deep_cove.mp3',
-      'image': 'http://localhost:8997/i1.jpg'
-    },
-    {
-      'audio': 'assets/audio/18331_Bird_night.mp3',
-      'image': 'http://localhost:8997/i2.jpg'
-    },
-    {
-      'audio': 'assets/audio/21104_Street_carnival.mp3',
-      'image': 'http://localhost:8997/i3.jpg'
-    },
-    {
-      'audio': 'assets/audio/22082_Beach_wave.mp3',
-      'image': 'http://localhost:8997/i4.jpg'
-    },
-    {
-      'audio': 'assets/audio/24298_Rain_Bali_Indonesia.mp3',
-      'image': 'http://localhost:8997/i5.jpg'
-    },
-    {'audio': 'assets/audio/cow.mp3', 'image': 'http://localhost:8997/i6.jpg'},
-  ];
+  final homeStore = HomeStore();
+  final soundManager = SoundManagerStore();
 
   @override
   void initState() {
     super.initState();
+    homeStore.getSoundFromLocal();
     playAudioFirst();
   }
 
   void playAudioFirst() {
-    _playAudio(pages[0]['audio'], image: pages[0]['image']);
-    controller.addListener(() {
-      setState(() {
-        currentPageValue = controller.page;
-      });
-      if (controller.page - controller.page.floor() == 0) {
-        int page = int.parse('${controller.page.floor()}');
-        if (selectedPage != page) {
-          selectedPage = page;
-          _playAudio(pages[page]['audio'], image: pages[page]['image']);
+    if(homeStore.sounds.length>0){
+      _playAudio(homeStore.sounds[0].mp3, image: homeStore.sounds[0].img);
+      controller.addListener(() {
+        setState(() {
+          currentPageValue = controller.page;
+        });
+        if (controller.page - controller.page.floor() == 0) {
+          int page = int.parse('${controller.page.floor()}');
+          if (selectedPage != page) {
+            selectedPage = page;
+            _playAudio(homeStore.sounds[0].mp3, image: homeStore.sounds[0].img);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   _playAudio(String url, {String image}) {
-    _assetsAudioPlayer.open(
-      Audio(
-        url,
-        metas: Metas(
-          title: "Country",
-          artist: "Florent Champigny",
-          album: "CountryAlbum",
-          image: MetasImage.network(image), //can be MetasImage.network
-        ),
-      ),
-      autoStart: true,
-      showNotification: true,
-    );
-    _assetsAudioPlayer.loop = true;
-    setState(() {
-      isPlay = true;
-    });
+    soundManager.playAudio(url, title: "Tide", artist: "Relax", album: "Meditation", image: image);
   }
 
   _pauseAudio() {
-    _assetsAudioPlayer.pause();
-    setState(() {
-      isPlay = false;
-    });
+    soundManager.pauseAudio();
   }
 
   _resumeAudio() {
-    _assetsAudioPlayer.play();
-    setState(() {
-      isPlay = true;
-    });
+    soundManager.resumeAudio();
   }
 
   togglePlay() {
@@ -139,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ClipRRect(
                     borderRadius: BorderRadius.all(
                         Radius.circular((currentPageValue - position) * 40)),
-                    child: Image.network(pages[position]['image'],
+                    child: Image.network(homeStore.sounds[position].img,
                         fit: BoxFit.cover)),
                 ...([
                   (!isPlay
@@ -164,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ClipRRect(
                   borderRadius: BorderRadius.all(
                       Radius.circular((position - currentPageValue) * 40)),
-                  child: Image.network(pages[position]['image'],
+                  child: Image.network(homeStore.sounds[position].img,
                       fit: BoxFit.cover))));
     } else {
       return InkWell(
@@ -172,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
             color: color,
             child: Center(
-                child: Image.network(pages[position]['image'],
+                child: Image.network(homeStore.sounds[position].img,
                     fit: BoxFit.cover))),
       );
     }
@@ -271,13 +228,14 @@ class _HomeScreenState extends State<HomeScreen> {
       children: <Widget>[
         Container(
             color: Colors.black,
-            child: PageView.builder(
+            child: Observer(
+                builder: (context) => PageView.builder(
               controller: controller,
               itemBuilder: (context, position) {
                 return _buildPage(context, position);
               },
-              itemCount: pages.length, // Can be null
-            )),
+              itemCount: homeStore.sounds.length, // Can be null
+            ))),
         SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -456,7 +414,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    _assetsAudioPlayer.dispose();
+    soundManager.dispose();
     controller.dispose();
     super.dispose();
   }

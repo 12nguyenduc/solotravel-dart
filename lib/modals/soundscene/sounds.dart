@@ -1,7 +1,9 @@
 
 class Sound {
 
-  int id;
+	Sound();
+
+	int id;
   int type;
   String title;
   String description;
@@ -29,4 +31,5 @@ class Sound {
 		data['mp3'] = mp3;
 		return data;
 	}
+
 }

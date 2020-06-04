@@ -1,12 +1,14 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:solotravel/modals/soundscene/sounds.dart';
+import 'package:solotravel/screens/Pratice.dart';
 import 'package:solotravel/stores/SoundScene.dart';
 import 'package:solotravel/utils/preference.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -38,6 +40,24 @@ class _SoundSceneScreenState extends State<SoundSceneScreen> {
       });
     });
     soundSceneStore.getDataSoundScene();
+  }
+
+  _goPractice(Sound sound) {
+    Navigator.push(
+        context,
+        PageRouteBuilder(transitionsBuilder:
+            (___, Animation<double> animation, ____, Widget child) {
+          return FadeTransition(
+            opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+              child: child,
+            ),
+          );
+        }, pageBuilder: (BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          return PracticeScreen(sound);
+        }));
   }
 
   @override
@@ -133,7 +153,7 @@ class _SoundSceneScreenState extends State<SoundSceneScreen> {
                           return Container(
                             child:  InkWell(
                               onTap: (){
-                                saveSound(item);
+                                _goPractice(item);
                               },
                               child:Column(
                               children: <Widget>[
@@ -143,8 +163,8 @@ class _SoundSceneScreenState extends State<SoundSceneScreen> {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(8)),
-                                        child: Image.network(
-                                          item.img,
+                                        child: CachedNetworkImage(
+                                          imageUrl:  item.img,
                                           width: MediaQuery.of(context)
                                                       .size
                                                       .width /

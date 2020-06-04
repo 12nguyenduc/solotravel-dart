@@ -15,6 +15,9 @@ public class Application: FlutterApplication(), PluginRegistrantCallback {
 
     override fun registerWith(registry: PluginRegistry) {
         FirebaseCloudMessagingPluginRegistrant.registerWith(registry)
-        GeneratedPluginRegistrant.registerWith(registry)
+        if (!registry.hasPlugin("vn.hunghd.flutterdownloader.FlutterDownloaderPlugin")) {
+            FlutterDownloaderPlugin.registerWith(registry.registrarFor("vn.hunghd.flutterdownloader.FlutterDownloaderPlugin"))
+        }
+
     }
 }

@@ -36,9 +36,7 @@ class _BreathScreenState extends State<BreathScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
   }
 
   @override

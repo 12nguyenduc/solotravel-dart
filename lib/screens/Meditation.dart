@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:solotravel/modals/soundscene/sounds.dart';
 import 'package:solotravel/utils/log.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
@@ -50,7 +51,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
           );
         }, pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) {
-          return PracticeScreen();
+          return PracticeScreen(Sound());
         }));
   }
 

@@ -48,6 +48,7 @@ abstract class ExploreStoreBase with Store {
       meditation = exploreResponse.data.meditation;
       sleep = exploreResponse.data.sleep;
       daily = exploreResponse.data.daily;
+      daily.userLike = [...daily.userLike, ...daily.userLike];
       blog = exploreResponse.data.blog;
     }
   }

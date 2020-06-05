@@ -15,6 +15,7 @@ import 'package:solotravel/stores/ExploreStore.dart';
 
 import 'Meditation.dart';
 import 'Practice.dart';
+import 'WebView.dart';
 
 class ExploreScreen extends StatefulWidget {
   static ExploreScreen _instance = new ExploreScreen._();
@@ -30,7 +31,7 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   final exploreStore = ExploreStore();
 
-
+  double size = 24;
 
   @override
   void initState() {
@@ -113,6 +114,28 @@ class _ExploreScreenState extends State<ExploreScreen> {
             pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> secondaryAnimation) {
               return MeditationScreen();
+            }));
+  }
+
+  _goBlog(String url) {
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            opaque: false,
+            transitionsBuilder:
+                (___, Animation<double> animation, ____, Widget child) {
+              return FadeTransition(
+                opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+                child: ScaleTransition(
+                  scale:
+                      Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+                  child: child,
+                ),
+              );
+            },
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) {
+              return WebViewScreen(url);
             }));
   }
 
@@ -757,9 +780,60 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           color: Colors.black,
                         ),
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
                             Expanded(
-                              child: Container(),
+                              child: Container(
+                                  child: Row(
+                                  children: <Widget>[
+                                ConstrainedBox(
+                                        child: Swiper(
+                                          scrollDirection: Axis.horizontal,
+                                          viewportFraction: 0.2,
+                                          autoplay: true,
+                                          outer: true,
+                                          itemBuilder: (c, i) {
+                                            return Container(
+                                                width: size,
+                                                height: size,
+                                                transform: Matrix4.translationValues(
+                                                    -size * 1 / 4, 0.0, 0.0),
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                      color: Colors.white,
+                                                    ),
+                                                    borderRadius: BorderRadius.all(
+                                                        Radius.circular(size / 2))),
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(size / 2)),
+                                                  child: CachedNetworkImage(imageUrl: exploreStore.daily.userLike[i],
+                                                    width: size,
+                                                    height: size,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ));
+                                          },
+                                          itemCount: 10,
+                                          itemHeight: size,
+                                          itemWidth: size,
+                                          layout: SwiperLayout.CUSTOM,
+                                          customLayoutOption:
+                                          CustomLayoutOption(stateCount: 7, startIndex: 0)
+                                              .addTranslate([
+                                            Offset((-4 * 3 / 4 + 1 / 4) * size, 0),
+                                            Offset((-2 * 3 / 4 + 1 / 4) * size, 0),
+                                            Offset((-1 * 3 / 4 + 1 / 4) * size, 0),
+                                            Offset((-0 * 3 / 4 + 1 / 4) * size, 0),
+                                            Offset((1 * 3 / 4 + 1 / 4) * size, 0),
+                                            Offset((2 * 3 / 4 + 1 / 4) * size, 0),
+                                            Offset((4 * 3 / 4 + 1 / 4) * size, 0)
+                                          ]),
+                                        ),
+                                        constraints: new BoxConstraints.loose(
+                                            new Size(size * 5 * 3 / 4 + size * 1 / 4, size)))
+                                ])
+                              ),
                             ),
                             InkWell(
                                 child: Container(
@@ -796,7 +870,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         margin: const EdgeInsets.only(
                             left: 16, right: 16, top: 16, bottom: 16),
                         child: InkWell(
-                            onTap: () {},
+                            onTap: ()=>_goBlog(exploreStore.blog[index].url),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[

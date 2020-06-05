@@ -25,6 +25,7 @@ void saveSound(Sound sound) async {
         isContain = true;
       }
     }
+    myLog(isContain);
     if(!isContain){
       sounds.add(sound);
       prefs.setString(SOUNDS, jsonEncode(sounds));
@@ -46,11 +47,11 @@ Future<List<Sound>> getSounds() async {
   }
   myLog(sounds.length);
   if(sounds.length==0){
-    myLog(await rootBundle.loadString('assets/json/soundDefault.json'));
     List<dynamic> listSound = jsonDecode(await rootBundle.loadString('assets/json/soundDefault.json'));
     for(int i=0; i<listSound.length; i++){
       sounds.add(Sound.fromJsonMap(listSound[i]));
     }
+    prefs.setString(SOUNDS, jsonEncode(sounds));
   }
   return sounds;
 }

@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:solotravel/modals/sound.dart';
+import 'package:solotravel/stores/SoundManagerStore.dart';
+import 'package:solotravel/utils/preference.dart';
 
 class PracticeScreen extends StatefulWidget {
   Sound sound;
@@ -15,12 +17,18 @@ class _PracticeScreenState extends State<PracticeScreen> {
   double size = 18;
   Sound sound;
 
+  final soundManager = SoundManagerStore();
 
   _PracticeScreenState(this.sound);
 
   @override
   void initState() {
     super.initState();
+  }
+
+  _save(){
+    saveSound(sound);
+    soundManager.playAudio(sound.url, image: sound.img);
   }
 
   @override
@@ -115,14 +123,20 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 )
               ],
             ),
-            Padding(
+            Expanded(child: Padding(
               padding: EdgeInsets.all(24),
               child: Text(
                 '''Stress hormone levels fell by nearly twice as much in tea drinkers compared with those given a tea-like drink, after all had been put under stress.
             ''',
                 style: TextStyle(fontSize: 16),
               ),
-            )
+            )),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+              Container(margin: EdgeInsets.only(bottom: 24), child: FlatButton(color: Colors.green[600], onPressed: _save, child: Text('Download', style: TextStyle(color: Colors.white, fontSize: 14, ),),))
+            ],)
           ],
         ),
       ),

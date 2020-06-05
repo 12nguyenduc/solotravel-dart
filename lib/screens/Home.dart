@@ -88,7 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
     Color color = Colors.black;
 
     if (position == currentPageValue.floor()) {
-      return InkWell(
+      return Observer(
+          builder: (context) =>InkWell(
           onTap: togglePlay,
           child: Container(
             padding: EdgeInsets.all((70 * (currentPageValue - position))),
@@ -114,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ]),
               ],
             ),
-          ));
+          )));
     } else if (position == currentPageValue.floor() + 1) {
       return InkWell(
           onTap: togglePlay,

@@ -1,4 +1,4 @@
-import 'package:solotravel/modals/soundscene/sounds.dart';
+import 'package:solotravel/modals/sound.dart';
 
 class Data {
 

@@ -1,0 +1,29 @@
+[
+  {
+    "id": 100001,
+    "type": 1,
+    "title": "Moonsun Rise",
+    "description": "Sound of the Nepal",
+    "img": "https://images.unsplash.com/photo-1562682870-817d39cc7aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80",
+    "color": "#c96f57",
+    "mp3": "http://shopcutes.com/audio/3087_moonsun-rise.mp3"
+  },
+  {
+    "id": 100002,
+    "type": 2,
+    "title": "Memories",
+    "description": "Sound of the Nepal",
+    "img": "https://images.unsplash.com/photo-1452109777848-a4de775da10d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1352&q=80",
+    "color": "#c96f57",
+    "mp3": "http://shopcutes.com/audio/1025_memories.mp3"
+  },
+  {
+    "id": 100003,
+    "type": 1,
+    "title": "Music Box",
+    "description": "A twirling music box",
+    "img": "https://cdn.pixabay.com/photo/2016/02/19/10/53/beach-1209477_960_720.jpg",
+    "color": "#c96f57",
+    "mp3": "http://shopcutes.com/audio/7184_enough-heart.mp3"
+  }
+]

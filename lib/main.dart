@@ -5,19 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:solotravel/components/LazyListView.dart';
-import 'package:solotravel/modals/soundscene/sounds.dart';
+import 'package:solotravel/modals/sound.dart';
 import 'package:solotravel/screens/Main.dart';
 import 'webthread/webthread.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
 void main() {
   runApp(MyApp());
-  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom, SystemUiOverlay.top]);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   MyApp() {
-    WebThread();
+//    WebThread();
     WidgetsFlutterBinding.ensureInitialized();
     FlutterDownloader.initialize(
         debug: true // optional: set false to disable printing logs to console
@@ -29,7 +32,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MainScreen(),
     );

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -40,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarIconBrightness: Brightness.light));
     homeStore.getSoundFromLocal();
     playAudioFirst();
   }
@@ -96,10 +99,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ClipRRect(
                     borderRadius: BorderRadius.all(
                         Radius.circular((currentPageValue - position) * 40)),
-                    child: Image.network(homeStore.sounds[position].img,
+                    child: CachedNetworkImage(imageUrl:homeStore.sounds[position].img,
                         fit: BoxFit.cover)),
                 ...([
-                  (!isPlay
+                  (!soundManager.isPlay
                       ? Center(
                           child: Icon(
                             FontAwesomeIcons.play,
@@ -414,7 +417,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    soundManager.dispose();
+//    soundManager.dispose();
     controller.dispose();
     super.dispose();
   }

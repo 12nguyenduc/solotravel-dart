@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:solotravel/modals/soundscene/sounds.dart';
+import 'package:solotravel/modals/sound.dart';
 
 class PracticeScreen extends StatefulWidget {
   Sound sound;
@@ -58,7 +58,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
               alignment: AlignmentDirectional.bottomStart,
               children: <Widget>[
                 CachedNetworkImage(
-                  imageUrl: sound.img,
+                  imageUrl: sound.img!=null?sound.img:'',
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.width,
                   fit: BoxFit.cover,

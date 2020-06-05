@@ -43,9 +43,10 @@ abstract class SoundManagerStoreBase with Store {
 //          }
         )
     );
-    if(loop)
+    if(loop==true){
       _assetsAudioPlayer.loop = true;
-      isPlay = true;
+    }
+    isPlay = true;
   }
 
   @action

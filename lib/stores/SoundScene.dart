@@ -1,7 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:solotravel/modals/soundscene/SoundSceneResponse.dart';
 import 'package:solotravel/modals/soundscene/data.dart';
-import 'package:solotravel/modals/soundscene/sounds.dart';
+import 'package:solotravel/modals/sound.dart';
 import 'package:solotravel/network/MyApi.dart';
 import 'package:solotravel/network/api.dart';
 import 'package:solotravel/utils/log.dart';

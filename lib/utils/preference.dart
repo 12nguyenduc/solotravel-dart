@@ -1,7 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:solotravel/modals/soundscene/sounds.dart';
+import 'package:solotravel/modals/sound.dart';
 import 'package:solotravel/utils/log.dart';
 
 const String SOUNDS = 'SOUND';
@@ -12,19 +13,6 @@ void logout() async {
   prefs.clear();
 }
 
-//void saveUserInfo(User user) async {
-//  SharedPreferences prefs = await SharedPreferences.getInstance();
-//  prefs.setString(USER_INFO, jsonEncode(user.toJson()));
-//}
-//
-//Future<User> getUserInfo() async {
-//  SharedPreferences prefs = await SharedPreferences.getInstance();
-//  String userInfoString = prefs.getString(USER_INFO);
-//  if(userInfoString!=null)
-//    return User.fromJsonMap(jsonDecode(prefs.getString(USER_INFO)));
-//  else
-//    return null;
-//}
 
 void saveSound(Sound sound) async {
   try {
@@ -57,6 +45,13 @@ Future<List<Sound>> getSounds() async {
     }
   }
   myLog(sounds.length);
+  if(sounds.length==0){
+    myLog(await rootBundle.loadString('assets/json/soundDefault.json'));
+    List<dynamic> listSound = jsonDecode(await rootBundle.loadString('assets/json/soundDefault.json'));
+    for(int i=0; i<listSound.length; i++){
+      sounds.add(Sound.fromJsonMap(listSound[i]));
+    }
+  }
   return sounds;
 }
 

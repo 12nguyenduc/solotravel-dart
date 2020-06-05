@@ -1,14 +1,17 @@
 
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:solotravel/modals/soundscene/sounds.dart';
+import 'package:solotravel/modals/sound.dart';
+import 'package:solotravel/stores/MeditationStore.dart';
 import 'package:solotravel/utils/log.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
-import 'Pratice.dart';
+import 'Practice.dart';
 
 class MeditationScreen extends StatefulWidget {
   MeditationScreen();
@@ -19,13 +22,12 @@ class MeditationScreen extends StatefulWidget {
 
 class _MeditationScreenState extends State<MeditationScreen> {
 
-  List<int> list = [1, 2, 3, 4, 5,1, 2, 3, 4, 5,1, 2, 3, 4, 5,1, 2, 3, 4, 5,1, 2, 3, 4, 5,1, 2, 3, 4, 5,];
 
   ScrollController scrollController = new ScrollController();
 
   double offsetHeader = 0;
 
-  int countItems = Random().nextInt(100);
+  final meditationStore = MeditationStore();
 
   @override
   void initState() {
@@ -35,9 +37,10 @@ class _MeditationScreenState extends State<MeditationScreen> {
           offsetHeader = scrollController.offset>=0?scrollController.offset>50?50:scrollController.offset:0;
         });
     });
+    meditationStore.getDataMeditation();
   }
 
-  _goPractice() {
+  _goPractice(Sound sound) {
     Navigator.push(
         context,
         PageRouteBuilder(transitionsBuilder:
@@ -51,7 +54,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
           );
         }, pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) {
-          return PracticeScreen(Sound());
+          return PracticeScreen(sound);
         }));
   }
 
@@ -74,7 +77,8 @@ class _MeditationScreenState extends State<MeditationScreen> {
               color: Colors.black87),
         )),
       ),
-      body: Container(
+      body: Observer(
+    builder: (context) => Container(
           color: Colors.white,
           child: SafeArea(
               child: ListView(
@@ -98,7 +102,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       )),
           Padding(padding: EdgeInsets.all(16), child: InkWell(
-
+            onTap: ()=>_goPractice(meditationStore.daily),
             child: Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(color: Colors.grey.withOpacity(0.3), borderRadius: BorderRadius.all(Radius.circular(12))),
@@ -114,7 +118,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "Gratitude",
+                      meditationStore.daily.title!=null?meditationStore.daily.title:"",
                       style: TextStyle(
                           color: Colors.black87,
                           fontSize: 14,
@@ -123,7 +127,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
                   ],)),
                 ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
-                  child: Image.asset('assets/images/adventure.jpg', width: 30, height: 30, fit: BoxFit.cover,),)
+                  child: CachedNetworkImage(imageUrl: meditationStore.daily.img!=null?meditationStore.daily.img:'', width: 30, height: 30, fit: BoxFit.cover,),)
               ],
 
               ),),)),
@@ -233,9 +237,9 @@ class _MeditationScreenState extends State<MeditationScreen> {
                         childAspectRatio: 1.1,
                         physics: new NeverScrollableScrollPhysics(),
                         crossAxisCount: 2,
-                        children: List.generate(8, (index) {
+                        children: List.generate(meditationStore.singles.length, (index) {
                           return InkWell(
-                              onTap: () {},
+                              onTap: ()=>_goPractice(meditationStore.singles[index]),
                               child: Container(
                                   margin: new EdgeInsets.only(
                                       left: (index % 2 == 0 ? 0 : 8)),
@@ -248,8 +252,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
                                       ClipRRect(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(8)),
-                                          child: Image.asset(
-                                            'assets/images/adventure.jpg',
+                                          child: CachedNetworkImage(imageUrl: meditationStore.singles[index].img,
                                             width: (MediaQuery.of(context).size.width - 32 - 16) / 2,
                                             height: ((MediaQuery.of(context).size.width - 32 - 16) / 2) * 9 / 16,
                                             fit: BoxFit.cover,
@@ -257,14 +260,14 @@ class _MeditationScreenState extends State<MeditationScreen> {
                                       Padding(
                                           padding:
                                           const EdgeInsets.only(top: 8),
-                                          child: Text("A Trip to Dunhuang",
+                                          child: Text(meditationStore.singles[index].title,
                                               style: TextStyle(
                                                   color: Color(0xff0f0f0f),
                                                   fontSize: 14))),
                                       Padding(
                                           padding:
                                           const EdgeInsets.only(top: 4),
-                                          child: Text("20 MIN - SINGLES",
+                                          child: Text(meditationStore.singles[index].description,
                                               style: TextStyle(
                                                   color: Color(0xff2c2c2c),
                                                   fontSize: 12))),
@@ -312,9 +315,9 @@ class _MeditationScreenState extends State<MeditationScreen> {
                         // crossAxisCount is the number of columns
                         crossAxisCount: 2,
                         // This creates two columns with two items in each column
-                        children: List.generate(4, (index) {
+                        children: List.generate(meditationStore.basic.length, (index) {
                           return InkWell(
-                              onTap: () {},
+                              onTap: ()=>_goPractice(meditationStore.basic[index]),
                               child: Container(
                                   margin: new EdgeInsets.only(
                                       left: (index % 2 == 0 ? 0 : 8)),
@@ -327,8 +330,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
                                       ClipRRect(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(8)),
-                                          child: Image.asset(
-                                            'assets/images/adventure.jpg',
+                                          child: CachedNetworkImage(imageUrl: meditationStore.basic[index].img,
                                             width: (MediaQuery.of(context).size.width - 32 - 16) / 2,
                                             height: ((MediaQuery.of(context).size.width - 32 - 16) / 2) * 9 / 16,
                                             fit: BoxFit.cover,
@@ -336,14 +338,14 @@ class _MeditationScreenState extends State<MeditationScreen> {
                                       Padding(
                                           padding:
                                           const EdgeInsets.only(top: 8),
-                                          child: Text("A Trip to Dunhuang",
+                                          child: Text(meditationStore.basic[index].title,
                                               style: TextStyle(
                                                   color: Color(0xff0f0f0f),
                                                   fontSize: 14))),
                                       Padding(
                                           padding:
                                           const EdgeInsets.only(top: 4),
-                                          child: Text("20 MIN - SINGLES",
+                                          child: Text(meditationStore.basic[index].description,
                                               style: TextStyle(
                                                   color: Color(0xffc2c2c2),
                                                   fontSize: 12))),
@@ -368,7 +370,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
                     color: Colors.grey,
                   ),
                 ],
-              ))),
+              )))),
     );
   }
 

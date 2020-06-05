@@ -1,14 +1,17 @@
 
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:solotravel/modals/soundscene/sounds.dart';
+import 'package:solotravel/modals/sound.dart';
+import 'package:solotravel/stores/SleepStore.dart';
 import 'package:solotravel/utils/log.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
-import 'Pratice.dart';
+import 'Practice.dart';
 
 class SleepScreen extends StatefulWidget {
   SleepScreen();
@@ -19,13 +22,11 @@ class SleepScreen extends StatefulWidget {
 
 class _SleepScreenState extends State<SleepScreen> {
 
-  List<int> list = [1, 2, 3, 4, 5,1, 2, 3, 4, 5,1, 2, 3, 4, 5,1, 2, 3, 4, 5,1, 2, 3, 4, 5,1, 2, 3, 4, 5,];
+  final sleepStore = SleepStore();
 
   ScrollController scrollController = new ScrollController();
 
   double offsetHeader = 0;
-
-  int countItems = Random().nextInt(100);
 
   @override
   void initState() {
@@ -35,9 +36,10 @@ class _SleepScreenState extends State<SleepScreen> {
           offsetHeader = scrollController.offset>=0?scrollController.offset>50?50:scrollController.offset:0;
         });
     });
+    sleepStore.getDataSleep();
   }
 
-  _goPractice() {
+  _goPractice(Sound sound) {
     Navigator.push(
         context,
         PageRouteBuilder(transitionsBuilder:
@@ -51,7 +53,7 @@ class _SleepScreenState extends State<SleepScreen> {
           );
         }, pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) {
-          return PracticeScreen(Sound());
+          return PracticeScreen(sound);
         }));
   }
 
@@ -74,7 +76,8 @@ class _SleepScreenState extends State<SleepScreen> {
               color: Colors.white),
         )),
       ),
-      body: Container(
+      body: Observer(
+    builder: (context) => Container(
           color: Colors.black,
           child: SafeArea(
               child: ListView(
@@ -128,7 +131,7 @@ class _SleepScreenState extends State<SleepScreen> {
                     child: ListView.builder(
                       physics: ClampingScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: 10,
+                      itemCount: sleepStore.sleepAid.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
                         return Container(
@@ -141,7 +144,7 @@ class _SleepScreenState extends State<SleepScreen> {
                               borderRadius:
                               BorderRadius.all(Radius.circular(20))),
                           child: InkWell(
-                            onTap: _goPractice,
+                            onTap: ()=>_goPractice(sleepStore.sleepAid[index]),
                             child: Center(
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
@@ -149,8 +152,8 @@ class _SleepScreenState extends State<SleepScreen> {
                                     ClipRRect(
                                         borderRadius:
                                         BorderRadius.all(Radius.circular(58 / 2)),
-                                        child: Image.asset(
-                                          'assets/images/adventure.jpg',
+                                        child: CachedNetworkImage(
+                                          imageUrl: sleepStore.sleepAid[index].img,
                                           width: 58,
                                           height: 58,
                                           fit: BoxFit.cover,
@@ -160,7 +163,7 @@ class _SleepScreenState extends State<SleepScreen> {
                                           top: 12,
                                         ),
                                         child: Text(
-                                          "Galicier",
+                                          sleepStore.sleepAid[index].title,
                                           style: TextStyle(color: Color(0xffc2c2c2)),
                                         ))
                                   ],
@@ -210,9 +213,9 @@ class _SleepScreenState extends State<SleepScreen> {
                         // crossAxisCount is the number of columns
                         crossAxisCount: 2,
                         // This creates two columns with two items in each column
-                        children: List.generate(8, (index) {
+                        children: List.generate(sleepStore.night.length, (index) {
                           return InkWell(
-                              onTap: () {},
+                              onTap: ()=>_goPractice(sleepStore.night[index]),
                               child: Container(
                                   margin: new EdgeInsets.only(
                                       left: (index % 2 == 0 ? 0 : 8)),
@@ -225,8 +228,7 @@ class _SleepScreenState extends State<SleepScreen> {
                                       ClipRRect(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(8)),
-                                          child: Image.asset(
-                                            'assets/images/adventure.jpg',
+                                          child: CachedNetworkImage(imageUrl :sleepStore.sleepAid[index].img,
                                             width: (MediaQuery.of(context).size.width - 32 - 16) / 2,
                                             height: ((MediaQuery.of(context).size.width - 32 - 16) / 2) * 9 / 16,
                                             fit: BoxFit.cover,
@@ -234,14 +236,14 @@ class _SleepScreenState extends State<SleepScreen> {
                                       Padding(
                                           padding:
                                           const EdgeInsets.only(top: 8),
-                                          child: Text("A Trip to Dunhuang",
+                                          child: Text(sleepStore.sleepAid[index].title,
                                               style: TextStyle(
                                                   color: Color(0xfff0f0f0),
                                                   fontSize: 14))),
                                       Padding(
                                           padding:
                                           const EdgeInsets.only(top: 4),
-                                          child: Text("20 MIN - SINGLES",
+                                          child: Text(sleepStore.sleepAid[index].description,
                                               style: TextStyle(
                                                   color: Color(0xffc2c2c2),
                                                   fontSize: 12))),
@@ -289,9 +291,9 @@ class _SleepScreenState extends State<SleepScreen> {
                         // crossAxisCount is the number of columns
                         crossAxisCount: 2,
                         // This creates two columns with two items in each column
-                        children: List.generate(4, (index) {
+                        children: List.generate(sleepStore.daytime.length, (index) {
                           return InkWell(
-                              onTap: () {},
+                              onTap: ()=>_goPractice(sleepStore.daytime[index]),
                               child: Container(
                                   margin: new EdgeInsets.only(
                                       left: (index % 2 == 0 ? 0 : 8)),
@@ -304,8 +306,7 @@ class _SleepScreenState extends State<SleepScreen> {
                                       ClipRRect(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(8)),
-                                          child: Image.asset(
-                                            'assets/images/adventure.jpg',
+                                          child: CachedNetworkImage(imageUrl: sleepStore.daytime[index].img,
                                             width: (MediaQuery.of(context).size.width - 32 - 16) / 2,
                                             height: ((MediaQuery.of(context).size.width - 32 - 16) / 2) * 9 / 16,
                                             fit: BoxFit.cover,
@@ -313,14 +314,14 @@ class _SleepScreenState extends State<SleepScreen> {
                                       Padding(
                                           padding:
                                           const EdgeInsets.only(top: 8),
-                                          child: Text("A Trip to Dunhuang",
+                                          child: Text(sleepStore.daytime[index].title,
                                               style: TextStyle(
                                                   color: Color(0xfff0f0f0),
                                                   fontSize: 14))),
                                       Padding(
                                           padding:
                                           const EdgeInsets.only(top: 4),
-                                          child: Text("20 MIN - SINGLES",
+                                          child: Text(sleepStore.daytime[index].description,
                                               style: TextStyle(
                                                   color: Color(0xffc2c2c2),
                                                   fontSize: 12))),
@@ -370,7 +371,7 @@ class _SleepScreenState extends State<SleepScreen> {
                     color: Colors.grey,
                   ),
                 ],
-              ))),
+              ))),)
     );
   }
 

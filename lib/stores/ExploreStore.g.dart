@@ -114,6 +114,21 @@ mixin _$ExploreStore on ExploreStoreBase, Store {
     });
   }
 
+  final _$minisAtom = Atom(name: 'ExploreStoreBase.minis');
+
+  @override
+  List<Sound> get minis {
+    _$minisAtom.reportRead();
+    return super.minis;
+  }
+
+  @override
+  set minis(List<Sound> value) {
+    _$minisAtom.reportWrite(value, super.minis, () {
+      super.minis = value;
+    });
+  }
+
   final _$getDataExploreAsyncAction =
       AsyncAction('ExploreStoreBase.getDataExplore');
 
@@ -131,7 +146,8 @@ sound: ${sound},
 meditation: ${meditation},
 sleep: ${sleep},
 daily: ${daily},
-blog: ${blog}
+blog: ${blog},
+minis: ${minis}
     ''';
   }
 }

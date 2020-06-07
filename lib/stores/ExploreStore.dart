@@ -37,6 +37,9 @@ abstract class ExploreStoreBase with Store {
   @observable
   List<Sound> blog = [];
 
+  @observable
+  List<Sound> minis = [];
+
 
   @action
   Future<void> getDataExplore() async{
@@ -47,6 +50,7 @@ abstract class ExploreStoreBase with Store {
       sound = exploreResponse.data.sound;
       meditation = exploreResponse.data.meditation;
       sleep = exploreResponse.data.sleep;
+      minis = exploreResponse.data.minis;
       daily = exploreResponse.data.daily;
       daily.userLike = [...daily.userLike, ...daily.userLike];
       blog = exploreResponse.data.blog;

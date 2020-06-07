@@ -8,6 +8,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:solotravel/modals/sound.dart';
 import 'package:solotravel/screens/Sleep.dart';
 import 'package:solotravel/screens/SoundScene.dart';
@@ -141,6 +142,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime currentDate = DateTime.now();
+
     return Observer(
         builder: (context) => Container(
               color: Colors.white,
@@ -354,10 +357,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             )),
                         Container(
                           height:
-                              (MediaQuery.of(context).size.width - 32 - 8 * 4) /
-                                  3 *
-                                  4 /
-                                  3,
+                              (MediaQuery.of(context).size.width - 32 - 8 * 4) / 3 * 4 / 3,
                           // give it a fixed height constraint
                           // child ListView
                           child: ListView.builder(
@@ -367,10 +367,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (BuildContext context, int index) {
                               return Container(
-                                width: (MediaQuery.of(context).size.width -
-                                        32 -
-                                        8 * 4) /
-                                    3,
+                                width: (MediaQuery.of(context).size.width - 32 -  8 * 4) / 3,
                                 margin: const EdgeInsets.only(left: 16),
                                 decoration: BoxDecoration(
                                     color: Color(0xfff5f5f5),
@@ -444,19 +441,17 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           // give it a fixed height constraint
                           // child ListView
                           child: ListView.builder(
-                            itemCount: 10,
+                            itemCount: exploreStore.minis.length,
                             physics: ClampingScrollPhysics(),
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (BuildContext context, int index) {
                               return Container(
-                                width: (MediaQuery.of(context).size.width -
-                                        32 -
-                                        8 * 4) /
+                                width: (MediaQuery.of(context).size.width - 32 - 8 * 4) /
                                     4.5,
                                 margin: const EdgeInsets.only(left: 16),
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () =>_goPractice(exploreStore.minis[index]),
                                   child: Center(
                                       child: Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -468,8 +463,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                           child: ClipRRect(
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(58 / 2)),
-                                              child: Image.asset(
-                                                'assets/images/adventure.jpg',
+                                              child: CachedNetworkImage(imageUrl: exploreStore.minis[index].img,
                                                 width: 58,
                                                 height: 58,
                                                 fit: BoxFit.cover,
@@ -479,7 +473,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                             top: 12,
                                           ),
                                           child: Text(
-                                            "Galicier",
+                                            exploreStore.minis[index].title,
                                             style: TextStyle(
                                                 color: Color(0xffc2c2c2)),
                                           ))
@@ -523,7 +517,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                               children: List.generate(
                                   exploreStore.meditation.length, (index) {
                                 return InkWell(
-                                    onTap: () {},
+                                    onTap: ()=>_goPractice(exploreStore.meditation[index]),
                                     child: Container(
                                         margin: new EdgeInsets.only(
                                             left: (index % 2 == 0 ? 0 : 8)),
@@ -539,21 +533,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                                 child: CachedNetworkImage(
                                                   imageUrl: exploreStore
                                                       .meditation[index].img,
-                                                  width: (MediaQuery.of(context)
-                                                              .size
-                                                              .width -
-                                                          32 -
-                                                          16) /
-                                                      2,
-                                                  height:
-                                                      ((MediaQuery.of(context)
-                                                                      .size
-                                                                      .width -
-                                                                  32 -
-                                                                  16) /
-                                                              2) *
-                                                          9 /
-                                                          16,
+                                                  width: (MediaQuery.of(context).size.width - 32 - 16) / 2,
+                                                  height: ((MediaQuery.of(context).size.width - 2 - 16) / 2) * 9 / 16,
                                                   fit: BoxFit.cover,
                                                 )),
                                             Padding(
@@ -626,7 +607,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   children: List.generate(
                                       exploreStore.sleep.length, (index) {
                                     return InkWell(
-                                        onTap: () {},
+                                        onTap: () =>_goPractice(exploreStore.sleep[index]),
                                         child: Container(
                                             margin: new EdgeInsets.only(
                                                 left: (index % 2 == 0 ? 0 : 8)),
@@ -643,22 +624,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                                     child: CachedNetworkImage(
                                                       imageUrl: exploreStore
                                                           .sleep[index].img,
-                                                      width: (MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width -
-                                                              32 -
-                                                              16) /
-                                                          2,
-                                                      height: ((MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width -
-                                                                  32 -
-                                                                  16) /
-                                                              2) *
-                                                          9 /
-                                                          16,
+                                                      width: (MediaQuery.of(context).size.width -32 - 16) / 2,
+                                                      height: ((MediaQuery.of(context).size.width - 32 - 16) / 2) * 9 / 16,
                                                       fit: BoxFit.cover,
                                                     )),
                                                 Padding(
@@ -737,13 +704,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
-                                  Text("28",
+                                  Text('${currentDate.day}',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 30,
                                           fontFamily: 'Roboto',
                                           fontWeight: FontWeight.w700)),
-                                  Text("May",
+                                  Text('${DateFormat.MMM().format(currentDate)}',
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 14))
                                 ],

@@ -70,7 +70,7 @@ class _HomeNapScreenState extends State<HomeNapScreen> {
                 ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
-              title: Text("Focus"),
+              title: Text("Nap"),
             ),
             body: SafeArea(
               child: Column(

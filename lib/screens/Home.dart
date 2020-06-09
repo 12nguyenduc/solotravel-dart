@@ -42,31 +42,33 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarIconBrightness: Brightness.light));
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light
+        .copyWith(statusBarIconBrightness: Brightness.light));
     homeStore.getSoundFromLocal();
-    playAudioFirst();
+    controller.addListener(() {
+      setState(() {
+        currentPageValue = controller.page;
+      });
+      if (controller.page - controller.page.floor() == 0) {
+        int page = int.parse('${controller.page.floor()}');
+        if (selectedPage != page) {
+          selectedPage = page;
+          _playAudio(homeStore.sounds[0].mp3, image: homeStore.sounds[0].img);
+        }
+      }
+    });
+//    playAudioFirst();
   }
 
   void playAudioFirst() {
-    if(homeStore.sounds.length>0){
+    if (homeStore.sounds.length > 0) {
       _playAudio(homeStore.sounds[0].mp3, image: homeStore.sounds[0].img);
-      controller.addListener(() {
-        setState(() {
-          currentPageValue = controller.page;
-        });
-        if (controller.page - controller.page.floor() == 0) {
-          int page = int.parse('${controller.page.floor()}');
-          if (selectedPage != page) {
-            selectedPage = page;
-            _playAudio(homeStore.sounds[0].mp3, image: homeStore.sounds[0].img);
-          }
-        }
-      });
     }
   }
 
   _playAudio(String url, {String image}) {
-    soundManager.playAudio(url, title: "Tide", artist: "Relax", album: "Meditation", image: image);
+    soundManager.playAudio(url,
+        title: "Tide", artist: "Relax", album: "Meditation", image: image);
   }
 
   _pauseAudio() {
@@ -88,54 +90,61 @@ class _HomeScreenState extends State<HomeScreen> {
     Color color = Colors.black;
 
     if (position == currentPageValue.floor()) {
-      return Observer(
-          builder: (context) =>InkWell(
-          onTap: togglePlay,
-          child: Container(
-            padding: EdgeInsets.all((70 * (currentPageValue - position))),
-            decoration: BoxDecoration(color: color),
-            child: Stack(
-              fit: StackFit.expand,
-              children: <Widget>[
-                ClipRRect(
-                    borderRadius: BorderRadius.all(
-                        Radius.circular((currentPageValue - position) * 40)),
-                    child: CachedNetworkImage(imageUrl:homeStore.sounds[position].img,
-                        fit: BoxFit.cover)),
-                ...([
-                  (!soundManager.isPlay
-                      ? Center(
-                          child: Icon(
-                            FontAwesomeIcons.play,
-                            size: 40,
-                            color: Color(0xd0ffffff),
-                          ),
-                        )
-                      : Container())
-                ]),
-              ],
-            ),
-          )));
+      return InkWell(
+              onTap: togglePlay,
+              child: Container(
+                padding: EdgeInsets.all((70 * (currentPageValue - position))),
+                decoration: BoxDecoration(color: color),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(
+                            (currentPageValue - position) * 40)),
+                        child: CachedNetworkImage(
+                            width: MediaQuery.of(context).size.width,
+                            imageUrl: homeStore.sounds[position].img,
+                            fit: BoxFit.cover)),
+                    ...([
+                      (!soundManager.isPlay
+                          ? Center(
+                              child: Icon(
+                                FontAwesomeIcons.play,
+                                size: 40,
+                                color: Color(0xd0ffffff),
+                              ),
+                            )
+                          : Container())
+                    ]),
+                  ],
+                ),
+              ));
     } else if (position == currentPageValue.floor() + 1) {
       return InkWell(
-          onTap: togglePlay,
-          child: Container(
-              padding: EdgeInsets.all((70 * (position - currentPageValue))),
-              decoration: BoxDecoration(color: color),
-              child: ClipRRect(
-                  borderRadius: BorderRadius.all(
-                      Radius.circular((position - currentPageValue) * 40)),
-                  child: Image.network(homeStore.sounds[position].img,
-                      fit: BoxFit.cover))));
+              onTap: togglePlay,
+              child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.all((70 * (position - currentPageValue))),
+                  decoration: BoxDecoration(color: color),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.all(
+                          Radius.circular((position - currentPageValue) * 40)),
+                      child: CachedNetworkImage(
+                          width: MediaQuery.of(context).size.width,
+                          imageUrl: homeStore.sounds[position].img,
+                          fit: BoxFit.cover))));
     } else {
       return InkWell(
-        onTap: togglePlay,
-        child: Container(
-            color: color,
-            child: Center(
-                child: Image.network(homeStore.sounds[position].img,
-                    fit: BoxFit.cover))),
-      );
+                onTap: togglePlay,
+                child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    color: color,
+                    child: Center(
+                        child: CachedNetworkImage(
+                            width: MediaQuery.of(context).size.width,
+                            imageUrl: homeStore.sounds[position].img,
+                            fit: BoxFit.cover))),
+              );
     }
   }
 
@@ -146,12 +155,13 @@ class _HomeScreenState extends State<HomeScreen> {
             opaque: false,
             transitionsBuilder:
                 (___, Animation<double> animation, ____, Widget child) {
-              return  FadeTransition(
-                  opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
-                  child: ScaleTransition(
-                    scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
-                    child: child,
-                  ),
+              return FadeTransition(
+                opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+                child: ScaleTransition(
+                  scale:
+                      Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+                  child: child,
+                ),
               );
             },
             pageBuilder: (BuildContext context, Animation<double> animation,
@@ -167,10 +177,11 @@ class _HomeScreenState extends State<HomeScreen> {
             opaque: false,
             transitionsBuilder:
                 (___, Animation<double> animation, ____, Widget child) {
-              return  FadeTransition(
+              return FadeTransition(
                 opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
                 child: ScaleTransition(
-                  scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+                  scale:
+                      Tween<double>(begin: 0.86, end: 1.0).animate(animation),
                   child: child,
                 ),
               );
@@ -188,10 +199,11 @@ class _HomeScreenState extends State<HomeScreen> {
             opaque: false,
             transitionsBuilder:
                 (___, Animation<double> animation, ____, Widget child) {
-              return  FadeTransition(
+              return FadeTransition(
                 opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
                 child: ScaleTransition(
-                  scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+                  scale:
+                      Tween<double>(begin: 0.86, end: 1.0).animate(animation),
                   child: child,
                 ),
               );
@@ -202,7 +214,6 @@ class _HomeScreenState extends State<HomeScreen> {
             }));
   }
 
-
   _goBreath() {
     Navigator.push(
         context,
@@ -210,12 +221,13 @@ class _HomeScreenState extends State<HomeScreen> {
             opaque: false,
             transitionsBuilder:
                 (___, Animation<double> animation, ____, Widget child) {
-              return  FadeTransition(
-                  opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
-                  child: ScaleTransition(
-                    scale: Tween<double>(begin: 0.86, end: 1.0).animate(animation),
-                    child: child,
-                  ),
+              return FadeTransition(
+                opacity: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+                child: ScaleTransition(
+                  scale:
+                      Tween<double>(begin: 0.86, end: 1.0).animate(animation),
+                  child: child,
+                ),
               );
             },
             pageBuilder: (BuildContext context, Animation<double> animation,
@@ -223,8 +235,6 @@ class _HomeScreenState extends State<HomeScreen> {
               return BreathScreen();
             }));
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -323,9 +333,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Expanded(
-                    child: InkWell(
-                      onTap: _goSleep,
-                      child: Column(
+                      child: InkWell(
+                    onTap: _goSleep,
+                    child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
@@ -352,9 +362,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )),
                   Expanded(
-                    child: InkWell(
-                      onTap: _goNap,
-                      child: Column(
+                      child: InkWell(
+                    onTap: _goNap,
+                    child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
@@ -381,7 +391,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )),
                   Expanded(
-                    child: InkWell(onTap: _goBreath, child: Column(
+                      child: InkWell(
+                    onTap: _goBreath,
+                    child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(

@@ -70,7 +70,7 @@ class _HomeSleepScreenState extends State<HomeSleepScreen> {
                 ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
-              title: Text("Focus"),
+              title: Text("Sleep"),
             ),
             body: SafeArea(
               child: Column(
